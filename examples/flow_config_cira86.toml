@@ -1,0 +1,12 @@
+# flow_state configuration
+# Run: flow-state solve --config flow_config.toml
+
+mach = 5.3
+re1 = 17.8e6
+
+[atmosphere]
+model = "cira86"
+latitude = 70
+month = 1
+
+lref = 1.0
