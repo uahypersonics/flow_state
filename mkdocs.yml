@@ -1,0 +1,64 @@
+# BSD-3-Clause License - see LICENSE file
+site_name: flow_state
+site_url: https://uahypersonics.github.io/flow_state
+site_author: Christoph Hader
+site_description: Lightweight utility for constructing compressible flow states and reference conditions
+
+repo_name: uahypersonics/flow_state
+repo_url: https://github.com/uahypersonics/flow_state
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+  - admonition
+  - pymdownx.details
+  - tables
+  - attr_list
+  - md_in_html
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - User Guide:
+    - Basic Usage: user-guide/basic-usage.md
+    - Atmosphere Models: user-guide/atmosphere-models.md
+    - CLI: user-guide/cli.md
+    - Config Files: user-guide/config-files.md
+  - Theory: theory.md
+  - API Reference:
+    - FlowState: api/core.md
+    - Solvers: api/solvers.md
+    - Atmosphere: api/atmosphere.md
+  - Examples: examples.md
