@@ -100,6 +100,10 @@ nav:
     - Config Files: user-guide/config-files.md
   - Theory:
     - theory/index.md
+    - Gas Properties: theory/gas-properties.md
+    - Gas Models: theory/gas-models.md
+    - Definitions: theory/definitions.md
+    - Isentropic Relations: theory/isentropic.md
     - Transport Models: theory/transport.md
     - Atmosphere Models: theory/atmosphere-models.md
   - API Reference:

@@ -59,12 +59,12 @@ print(state)
 
 See [API Reference](../api/core.md) for the complete list of properties.
 
-## Gas Models
+## Gas and Transport Models
 
-Default is air (γ=1.4, R=287.05 J/kg·K). Use `gas` parameter for others:
+By default, `solve()` uses air with Sutherland viscosity. Use the `gas` parameter for other gases:
 
 ```python
 state = solve(mach=10, pres_stag=(1800, "psi"), temp_stag=1000, gas="n2")
 ```
 
-Supported: `"air"`, `"n2"`
+See [Theory → Gas Models](../theory/gas-models.md) for available models and temperature ranges.

@@ -1,8 +1,6 @@
 # Transport Models
 
-Various viscosity models are available in `flow_state`. All models compute [dynamic viscosity](https://www.grc.nasa.gov/www/k-12/airplane/viscosity.html) \(\mu\) as a function of temperature.
-
-For usage examples, see [API Reference](../api/core.md).
+Viscosity models available in `flow_state`. All models compute [dynamic viscosity](https://www.grc.nasa.gov/www/k-12/airplane/viscosity.html) \(\mu\) as a function of temperature.
 
 ## Overview
 

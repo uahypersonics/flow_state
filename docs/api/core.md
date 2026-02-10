@@ -13,8 +13,8 @@ from flow_state import FlowState
 ## Class Definition
 
 ```python
-@dataclass(frozen=True)
 class FlowState:
+    """Frozen dataclass representing a complete flow state."""
     # static conditions
     pres: float           # Static pressure [Pa]
     temp: float           # Static temperature [K]
