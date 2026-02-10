@@ -93,7 +93,7 @@ def display_results(state) -> None:
     st.subheader("Results")
     st.dataframe(
         data,
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
 
@@ -110,7 +110,7 @@ def display_results(state) -> None:
         data=json_content,
         file_name="flow_state.json",
         mime="application/json",
-        use_container_width=True,
+        width="stretch",
     )
 
     # Show raw output in expander
@@ -292,7 +292,7 @@ def main() -> None:
     st.divider()
 
     # Compute button
-    if st.button("Compute", type="primary", use_container_width=True):
+    if st.button("Compute", type="primary", width="stretch"):
         try:
             if solver == "mach_pres_temp":
                 state = from_mach_pres_temp(
