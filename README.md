@@ -9,7 +9,7 @@ Compressible flow state calculations for Python.
 ## Install
 
 ```bash
-pip install git+https://github.com/uahypersonics/flow_state.git
+pip install flow-state
 ```
 
 ## Quick Start

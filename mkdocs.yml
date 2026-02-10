@@ -98,6 +98,7 @@ nav:
     - Basic Usage: user-guide/basic-usage.md
     - CLI: user-guide/cli.md
     - Config Files: user-guide/config-files.md
+    - Output Formats: user-guide/output.md
   - Theory:
     - theory/index.md
     - Gas Properties: theory/gas-properties.md

@@ -8,7 +8,7 @@ Viscosity models available in `flow_state`. All models compute [dynamic viscosit
 |-------|-------|-------|-----------|
 | [Sutherland's Law](#sutherland) | `Sutherland` | Air, N2, Custom | [@sutherland1893] |
 | [Sutherland's Law with LTC](#sutherland_ltc) | `SutherlandLowTemp` | Air | [@mack1969] |
-| [Sutherland's Law with LTC (Blended)](#sutherland_blended) | `SutherlandBlended` | Air | — |
+| [Sutherland's Law with LTC (Blended)](#sutherland_blended) | `SutherlandBlended` | Air | - |
 | [Keyes](#keyes) | `Keyes` | Air, N2 | [@keyes1951] |
 | [Power Law](#power-law) | `PowerLaw` | Air | [@white2006] |
 

@@ -36,7 +36,7 @@ state = solve(mach=7, altitude=(100000, "ft"), atm="ussa76")
 
 ## The FlowState Object
 
-`solve()` returns a `FlowState` -- a frozen dataclass with all computed properties:
+`solve()` returns a `FlowState`, a frozen dataclass with all computed properties:
 
 ```python
 state = solve(mach=6.0, pres_stag=(140, "psi"), temp_stag=420)
