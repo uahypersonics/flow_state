@@ -30,9 +30,9 @@ pip install -e ".[dev]"
 
 This includes:
 
-- `pytest` and `pytest-cov` for testing
-- `ruff` for linting
-- `mkdocs-material` for documentation
+- [pytest](https://docs.pytest.org/) and [pytest-cov](https://pytest-cov.readthedocs.io/) for testing
+- [ruff](https://docs.astral.sh/ruff/) for linting
+- [mkdocs-material](https://squidfunk.github.io/mkdocs-material/) for documentation
 
 ## Verify Installation
 

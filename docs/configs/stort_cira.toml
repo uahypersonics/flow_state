@@ -1,0 +1,10 @@
+# STORT - Sounding Rocket Transition
+# Trajectory point with CIRA-86 atmosphere (mid-latitude summer)
+
+mach = 6.0
+altitude = 30000
+
+[atmosphere]
+model = "cira86"
+latitude = 35
+month = 7

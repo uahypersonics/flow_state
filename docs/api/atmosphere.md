@@ -17,7 +17,7 @@ from flow_state.atmosphere import AtmosphereState
 AtmosphereState(
     temperature: float,  # Temperature [K]
     pressure: float,     # Pressure [Pa]
-    density: float,      # Density [kg/m³]
+    density: float,      # Density [kg/m^3]
 )
 ```
 
@@ -91,7 +91,7 @@ h = 50_000
 polar = winter_polar(h)
 equatorial = summer_equatorial(h)
 
-print(f"Polar (70°N, Jan): T={polar.temperature:.1f} K")
+print(f"Polar (70 deg N, Jan): T={polar.temperature:.1f} K")
 print(f"Equatorial (Jul):  T={equatorial.temperature:.1f} K")
 ```
 
@@ -118,7 +118,7 @@ get_atmosphere_model(name: str) -> Callable[[float], AtmosphereState]
 | Name | Model |
 |------|-------|
 | `"ussa76"` | US Standard Atmosphere 1976 |
-| `"cira86"` | CIRA86 (default: 45°N, January) |
+| `"cira86"` | CIRA86 (default: 45 deg N, January) |
 
 ---
 

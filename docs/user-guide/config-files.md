@@ -1,45 +1,44 @@
 # Config Files
 
-`flow_state` can read flow conditions from TOML configuration files. This is useful for:
+`flow_state` reads flow conditions from TOML configuration files. Useful for documenting setups, sharing conditions, and version control.
 
-- Documenting simulation setups
-- Sharing conditions between team members
-- Version-controlling flow parameters
+## Usage
 
-## Basic Format
+### CLI
 
-```toml
-# flow_config.toml
-mach = 7.0
-pres = 1000.0
-temp = 200.0
+```bash
+flow-state solve --config myconfig.toml
+flow-state solve -c myconfig.toml -o results.json
 ```
 
-Load with:
+### Python
 
 ```python
 from flow_state.io import read_config
+from flow_state import solve
 
-state = read_config("flow_config.toml")
+kwargs = read_config("myconfig.toml")
+state = solve(**kwargs)
 ```
 
-Or from the CLI:
+## Format
 
-```bash
-flow-state from-config flow_config.toml
+### Stagnation Conditions (Wind Tunnel)
+
+```toml
+mach = 6.0
+pres_stag = [140, "psi"]
+temp_stag = 420
 ```
 
-## With Atmosphere Model
+### Flight Conditions
 
 ```toml
 mach = 7.0
-altitude = 30000
-atm = "ussa76"
+altitude = 25000
 ```
 
-## CIRA86 with Parameters
-
-For CIRA86 with custom latitude and month, use a nested table:
+With atmosphere model:
 
 ```toml
 mach = 7.0
@@ -47,65 +46,41 @@ altitude = 30000
 
 [atmosphere]
 model = "cira86"
-latitude = 70
+latitude = 35
 month = 7
-```
-
-## Unit Reynolds Specification
-
-```toml
-mach = 6.0
-re1 = 10e6
-temp = 300.0
-```
-
-## Custom Gas Properties
-
-```toml
-mach = 5.0
-pres = 500.0
-temp = 220.0
-gamma = 1.3
-r_gas = 188.9
-```
-
-## Full Example
-
-```toml
-# BAM6QT Mach 6 Quiet Tunnel conditions
-# Purdue University
-
-mach = 6.0
-re1 = 10.4e6
-temp = 52.8
-```
-
-## Writing Config Files
-
-You can export a `FlowState` to TOML:
-
-```python
-from flow_state import solve
-from flow_state.io import write_toml
-
-state = solve(mach=7.0, pres=1000.0, temp=200.0)
-write_toml(state, "output.toml")
 ```
 
 ## Supported Fields
 
-| Field | Description | Required |
-|-------|-------------|----------|
-| `mach` | Mach number | Yes |
-| `pres` | Static pressure [Pa] | Conditional |
-| `temp` | Static temperature [K] | Conditional |
-| `altitude` | Altitude [m] | Conditional |
-| `atm` | Atmosphere model name | With altitude |
-| `re1` | Unit Reynolds number [1/m] | Conditional |
+| Field | Type | Description |
+|-------|------|-------------|
+| `mach` | float | Mach number (required) |
+| `pres_stag` | float or [value, "unit"] | Stagnation pressure |
+| `temp_stag` | float | Stagnation temperature [K] |
+| `altitude` | float or [value, "unit"] | Altitude |
+| `pres` | float or [value, "unit"] | Static pressure |
+| `temp` | float or [value, "unit"] | Static temperature |
+| `gas` | string | Gas model: "air", "n2" |
+| `lref` | float | Reference length [m] |
 
-Valid combinations:
+### Atmosphere Section
 
-1. `mach` + `pres` + `temp`
-2. `mach` + `altitude` + `atm`
-3. `mach` + `re1` + `temp`
-4. `mach` + `re1` + `altitude`
+| Field | Type | Description |
+|-------|------|-------------|
+| `model` | string | "ussa76" or "cira86" |
+| `latitude` | float | Latitude for CIRA86 [deg] |
+| `month` | int | Month for CIRA86 (1-12) |
+
+## Unit Syntax
+
+Use `[value, "unit"]` arrays for non-SI units:
+
+```toml
+pres_stag = [140, "psi"]
+altitude = [100000, "ft"]
+temp = [25, "C"]
+```
+
+## Downloadable Examples
+
+See [Examples](../examples.md#config-files) for ready-to-use config files (BAM6QT, AEDC T9, HIFiRE-1, STORT).

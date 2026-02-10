@@ -1,0 +1,5 @@
+# HIFiRE-1 - Hypersonic International Flight Research Experimentation
+# Trajectory point
+
+mach = 7.0
+altitude = 25000

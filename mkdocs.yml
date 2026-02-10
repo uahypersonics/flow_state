@@ -1,63 +1,109 @@
 # BSD-3-Clause License - see LICENSE file
+
+# --------------------------------------------------
+# site metadata
+# --------------------------------------------------
 site_name: flow_state
 site_url: https://uahypersonics.github.io/flow_state
 site_author: Christoph Hader
-site_description: Lightweight utility for constructing compressible flow states and reference conditions
+site_description: Utility for calculating flow states (e.g., temperature, pressure, density) in Python.
 
+# --------------------------------------------------
+# github repository (adds link in top right corner)
+# --------------------------------------------------
 repo_name: uahypersonics/flow_state
 repo_url: https://github.com/uahypersonics/flow_state
 
+# --------------------------------------------------
+# theme configuration
+# uses Material for MkDocs: https://squidfunk.github.io/mkdocs-material/
+# --------------------------------------------------
 theme:
   name: material
+  # color palette with 3-way toggle: auto (system), light, dark
+  # available colors: https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/
   palette:
-    - scheme: default
-      primary: indigo
-      accent: indigo
+    - media: "(prefers-color-scheme)"
       toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    - scheme: slate
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-4
+        icon: material/brightness-auto
         name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue grey
+      accent: blue grey
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue grey
+      accent: blue grey
+      toggle:
+        icon: material/weather-night
+        name: Switch to system preference
+  # navigation and UI features
   features:
-    - navigation.sections
-    - navigation.expand
-    - navigation.top
-    - content.code.copy
-    - content.code.annotate
+    - navigation.tabs       # top-level sections as tabs in header
+    - navigation.sections   # bold section headers in sidebar
+    - navigation.indexes    # section index pages (index.md in each folder)
+    - navigation.top        # back-to-top button
+    - content.code.copy     # copy button on code blocks
+    - content.code.annotate # code annotations
 
+# --------------------------------------------------
+# plugins
+# --------------------------------------------------
 plugins:
   - search
+  - bibtex:
+      bib_file: "docs/refs.bib"
 
+# --------------------------------------------------
+# markdown extensions for syntax highlighting, math, etc.
+# --------------------------------------------------
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
+      linenums: true # enable line numbers in code blocks
   - pymdownx.superfences
-  - pymdownx.arithmatex:
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.arithmatex:    # LaTeX math support
       generic: true
-  - admonition
-  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - admonition              # note/warning/tip boxes
+  - pymdownx.details        # collapsible sections
   - tables
   - attr_list
   - md_in_html
+  - footnotes               # LaTeX-style references [^1]
 
+# --------------------------------------------------
+# javascript for MathJax (LaTeX rendering)
+# --------------------------------------------------
 extra_javascript:
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
+# --------------------------------------------------
+# navigation structure for the documentation
+# --------------------------------------------------
 nav:
   - Home: index.md
   - Installation: installation.md
   - User Guide:
+    - user-guide/index.md
     - Basic Usage: user-guide/basic-usage.md
-    - Atmosphere Models: user-guide/atmosphere-models.md
     - CLI: user-guide/cli.md
     - Config Files: user-guide/config-files.md
-  - Theory: theory.md
+  - Theory:
+    - theory/index.md
+    - Transport Models: theory/transport.md
+    - Atmosphere Models: theory/atmosphere-models.md
   - API Reference:
+    - api/index.md
     - FlowState: api/core.md
     - Solvers: api/solvers.md
     - Atmosphere: api/atmosphere.md

@@ -199,41 +199,92 @@ def cmd_init(
 
 
 # --------------------------------------------------
-# solve command: compute flow state from config
+# solve command: compute flow state from config or direct options
 # --------------------------------------------------
 
 
 @cli.command("solve")
 def cmd_solve(
-    # config option:
-    # - path to input config file
-    # - type: Path (automatically validated)
-    # - cli flags to set this option: --config or -c
-    # - default if option not provided in cli: flow_config.toml
+    # ----- Direct input options -----
+    mach: Annotated[
+        float | None,
+        typer.Option(
+            "--mach", "-m",
+            help="Mach number",
+        ),
+    ] = None,
+    pres_stag: Annotated[
+        float | None,
+        typer.Option(
+            "--pres-stag",
+            help="Stagnation pressure (default: Pa)",
+        ),
+    ] = None,
+    pres_stag_unit: Annotated[
+        str | None,
+        typer.Option(
+            "--pres-stag-unit",
+            help="Stagnation pressure unit (Pa, psi, atm, bar)",
+        ),
+    ] = None,
+    temp_stag: Annotated[
+        float | None,
+        typer.Option(
+            "--temp-stag",
+            help="Stagnation temperature (K)",
+        ),
+    ] = None,
+    altitude: Annotated[
+        float | None,
+        typer.Option(
+            "--altitude", "-a",
+            help="Altitude (default: m)",
+        ),
+    ] = None,
+    altitude_unit: Annotated[
+        str | None,
+        typer.Option(
+            "--altitude-unit",
+            help="Altitude unit (m, ft, km)",
+        ),
+    ] = None,
+    gas: Annotated[
+        str | None,
+        typer.Option(
+            "--gas",
+            help="Gas type (air, n2)",
+        ),
+    ] = None,
+    atm: Annotated[
+        str | None,
+        typer.Option(
+            "--atm",
+            help="Atmosphere model (ussa76, cira86)",
+        ),
+    ] = None,
+    lref: Annotated[
+        float | None,
+        typer.Option(
+            "--lref",
+            help="Reference length (m)",
+        ),
+    ] = None,
+    # ----- Config file option -----
     config: Annotated[
-        Path,
+        Path | None,
         typer.Option(
             "--config", "-c",
-            help="Input config file (TOML)",
+            help="Input config file (TOML). Ignored if direct options provided.",
         ),
-    ] = Path(DEFAULT_CONFIG),
-    # output option:
-    # - path to write the output JSON file
-    # - type: Path (automatically validated)
-    # - cli flags to set this option: --output or -o
-    # - default if option not provided in cli: flow_state.json
+    ] = None,
+    # ----- Output options -----
     output: Annotated[
-        Path,
+        Path | None,
         typer.Option(
             "--output", "-o",
-            help="Output file (JSON)",
+            help="Output file (JSON). If not specified, no file is written.",
         ),
-    ] = Path(DEFAULT_OUTPUT),
-    # quiet option:
-    # - whether to suppress summary output
-    # - type: bool (becomes a flag, no value needed)
-    # - cli flags to set this option: --quiet or -q
-    # - default if option not provided in cli: False (show summary)
+    ] = None,
     quiet: Annotated[
         bool,
         typer.Option(
@@ -243,22 +294,52 @@ def cmd_solve(
     ] = False,
 ) -> None:
     """
-    Compute flow state from config file.
+    Compute flow state from direct options or config file.
 
-    Reads flow_config.toml (or specified file), computes the flow state,
-    and writes results to flow_state.json.
+    Examples:
+        flow-state solve --mach 6 --pres-stag 140 --pres-stag-unit psi --temp-stag 420
+        flow-state solve --mach 7 --altitude 25000
+        flow-state solve --config myconfig.toml
     """
-    # check config exists
-    if not config.exists():
-        typer.echo(f"Error: {config} not found. Run 'flow-state init' first.", err=True)
-        raise typer.Exit(1)
+    # Check if any direct options are provided
+    has_direct_options = any([mach, pres_stag, temp_stag, altitude])
 
-    # read config file using io.read_config
-    try:
-        kwargs = read_config(config)
-    except Exception as e:
-        typer.echo(f"Error parsing {config}: {e}", err=True)
-        raise typer.Exit(1)
+    if has_direct_options:
+        # Build kwargs from direct options
+        kwargs = {}
+        if mach is not None:
+            kwargs["mach"] = mach
+        if pres_stag is not None:
+            if pres_stag_unit:
+                kwargs["pres_stag"] = (pres_stag, pres_stag_unit)
+            else:
+                kwargs["pres_stag"] = pres_stag
+        if temp_stag is not None:
+            kwargs["temp_stag"] = temp_stag
+        if altitude is not None:
+            if altitude_unit:
+                kwargs["altitude"] = (altitude, altitude_unit)
+            else:
+                kwargs["altitude"] = altitude
+        if gas is not None:
+            kwargs["gas"] = gas
+        if atm is not None:
+            kwargs["atm"] = atm
+        if lref is not None:
+            kwargs["lref"] = lref
+    else:
+        # Fall back to config file
+        config_path = config if config else Path(DEFAULT_CONFIG)
+        if not config_path.exists():
+            typer.echo(f"Error: {config_path} not found.", err=True)
+            typer.echo("Provide direct options (--mach, etc.) or run 'flow-state init' to create a config.", err=True)
+            raise typer.Exit(1)
+
+        try:
+            kwargs = read_config(config_path)
+        except Exception as e:
+            typer.echo(f"Error parsing {config_path}: {e}", err=True)
+            raise typer.Exit(1)
 
     # solve for flow state
     try:
@@ -267,9 +348,10 @@ def cmd_solve(
         typer.echo(f"Error computing flow state: {e}", err=True)
         raise typer.Exit(1)
 
-    # write JSON output using io.write_json
-    write_json(state, output)
-    typer.echo(f"Wrote {output}")
+    # write JSON output if requested
+    if output:
+        write_json(state, output)
+        typer.echo(f"Wrote {output}")
 
     # print summary unless quiet
     if not quiet:

@@ -1,0 +1,6 @@
+# BAM6QT - Boeing/AFOSR Mach 6 Quiet Tunnel (Purdue)
+# Typical quiet conditions
+
+mach = 6.0
+pres_stag = [140, "psi"]
+temp_stag = 420

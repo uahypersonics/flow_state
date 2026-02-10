@@ -1,0 +1,7 @@
+# AEDC Tunnel 9 - Arnold Engineering Development Complex (White Oak)
+# High-enthalpy nitrogen conditions
+
+mach = 10.0
+pres_stag = [1800, "psi"]
+temp_stag = 1000
+gas = "n2"

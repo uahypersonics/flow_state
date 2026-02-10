@@ -2,137 +2,200 @@
 
 Practical examples of using `flow_state` for common tasks.
 
-## Wind Tunnel Conditions
+## Python API
 
-### BAM6QT Quiet Tunnel
+### Wind Tunnel Conditions
 
-The Boeing/AFOSR Mach 6 Quiet Tunnel at Purdue:
+=== "BAM6QT"
 
-```python
-from flow_state import solve
+    The Boeing/AFOSR Mach 6 Quiet Tunnel at Purdue:
 
-# BAM6QT typical quiet conditions
-state = solve(mach=6.0, re1=10.4e6, temp=52.8)
+    ```python
+    from flow_state import solve
+    from flow_state.io import summary
 
-print(f"Mach:     {state.mach}")
-print(f"Re/m:     {state.re1:.2e}")
-print(f"T:        {state.temp:.1f} K")
-print(f"p:        {state.pres:.1f} Pa")
-print(f"rho:      {state.dens:.4f} kg/m³")
-print(f"U:        {state.uvel:.1f} m/s")
+    # BAM6QT typical quiet conditions
+    # p0 = 140 psi, T0 = 420 K
+    state = solve(
+        mach=6.0,
+        pres_stag=(140.0, "psi"),
+        temp_stag=420.0,
+    )
+
+    print(summary(state))
+    ```
+
+=== "AEDC Tunnel 9"
+
+    Arnold Engineering Development Complex Tunnel 9 (White Oak):
+
+    ```python
+    from flow_state import solve
+    from flow_state.io import summary
+
+    # AEDC T9 high-enthalpy conditions
+    # Mach 10, p0 = 1800 psi, T0 = 1000 K, nitrogen
+    state = solve(
+        mach=10.0,
+        pres_stag=(1800.0, "psi"),
+        temp_stag=1000.0,
+        gas="n2",
+    )
+
+    print(summary(state))
+    ```
+
+=== "UA LT5"
+
+    University of Alabama Ludwieg Tube 5:
+
+    ```python
+    from flow_state import solve
+    from flow_state.io import summary
+
+    # UA LT5 typical conditions
+    # Mach 5, p0 = 100 psi, T0 = 375 K
+    state = solve(
+        mach=5.0,
+        pres_stag=(100.0, "psi"),
+        temp_stag=375.0,
+    )
+
+    print(summary(state))
+    ```
+
+### Flight Conditions
+
+=== "STORT (USSA76)"
+
+    Sounding Rocket Transition (STORT) trajectory point using US Standard Atmosphere:
+
+    ```python
+    from flow_state import solve
+    from flow_state.io import summary
+
+    # STORT trajectory point
+    # Mach 6, altitude 30 km
+    state = solve(
+        mach=6.0,
+        altitude=30_000,
+        atm="ussa76",
+    )
+
+    print(summary(state))
+    ```
+
+=== "STORT (CIRA86)"
+
+    Same STORT trajectory point using CIRA-86 with latitude/month:
+
+    ```python
+    from flow_state import solve, atmosphere
+    from flow_state.io import summary
+
+    # STORT trajectory point with CIRA-86
+    # Mach 6, altitude 30 km, mid-latitude summer
+    cira = atmosphere.CIRA86(latitude=35, month=7)
+    state = solve(
+        mach=6.0,
+        altitude=30_000,
+        atm=cira,
+    )
+
+    print(summary(state))
+    ```
+
+=== "HIFiRE-1"
+
+    Hypersonic International Flight Research Experimentation (HIFiRE-1):
+
+    ```python
+    from flow_state import solve
+    from flow_state.io import summary
+
+    # HIFiRE-1 trajectory point
+    # Mach 7, altitude 25 km
+    state = solve(
+        mach=7.0,
+        altitude=25_000,
+    )
+
+    print(summary(state))
+    ```
+
+## CLI
+
+### Direct Options
+
+=== "BAM6QT"
+
+    ```bash
+    flow-state solve --mach 6 --pres-stag 140 --pres-stag-unit psi --temp-stag 420
+    ```
+
+=== "AEDC Tunnel 9"
+
+    ```bash
+    flow-state solve --mach 10 --pres-stag 1800 --pres-stag-unit psi --temp-stag 1000 --gas n2
+    ```
+
+=== "HIFiRE-1"
+
+    ```bash
+    flow-state solve --mach 7 --altitude 25000
+    ```
+
+### Config Files
+
+=== "BAM6QT"
+
+    ```toml title="bam6qt.toml"
+    mach = 6.0
+    pres_stag = [140, "psi"]
+    temp_stag = 420
+    ```
+
+    [:material-download: Download](configs/bam6qt.toml){ .md-button .md-button--primary download="bam6qt.toml" }
+
+=== "AEDC Tunnel 9"
+
+    ```toml title="aedc_t9.toml"
+    mach = 10.0
+    pres_stag = [1800, "psi"]
+    temp_stag = 1000
+    gas = "n2"
+    ```
+
+    [:material-download: Download](configs/aedc_t9.toml){ .md-button .md-button--primary download="aedc_t9.toml" }
+
+=== "HIFiRE-1"
+
+    ```toml title="hifire1.toml"
+    mach = 7.0
+    altitude = 25000
+    ```
+
+    [:material-download: Download](configs/hifire1.toml){ .md-button .md-button--primary download="hifire1.toml" }
+
+=== "STORT (CIRA86)"
+
+    ```toml title="stort_cira.toml"
+    mach = 6.0
+    altitude = 30000
+
+    [atmosphere]
+    model = "cira86"
+    latitude = 35
+    month = 7
+    ```
+
+    [:material-download: Download](configs/stort_cira.toml){ .md-button .md-button--primary download="stort_cira.toml" }
+
+Run with:
+
+```bash
+flow-state solve --config <filename>.toml
 ```
 
-### Comparing Conditions
+See [CLI Usage](user-guide/cli.md) and [Config Files](user-guide/config-files.md) for more details.
 
-```python
-from flow_state import solve
-
-# Same Mach, different Reynolds numbers
-conditions = [
-    {"re1": 5e6, "label": "Low Re"},
-    {"re1": 10e6, "label": "Medium Re"},
-    {"re1": 20e6, "label": "High Re"},
-]
-
-for cond in conditions:
-    state = solve(mach=6.0, re1=cond["re1"], temp=65.0)
-    print(f"{cond['label']:12s}: p = {state.pres:8.1f} Pa")
-```
-
-## Flight Conditions
-
-### Altitude Sweep
-
-```python
-from flow_state import solve
-
-altitudes = [20_000, 30_000, 40_000, 50_000, 60_000]  # meters
-
-print("Alt [km]    T [K]      p [Pa]     Re/m")
-print("-" * 45)
-
-for alt in altitudes:
-    state = solve(mach=7.0, altitude=alt, atm="ussa76")
-    print(f"{alt/1000:6.0f}    {state.temp:7.1f}    {state.pres:9.1f}    {state.re1:.2e}")
-```
-
-### Trajectory Point
-
-```python
-from flow_state import solve, atmosphere
-
-# Reentry vehicle at specific trajectory point
-mach = 15.0
-altitude = 50_000  # 50 km
-
-# Using latitude-dependent atmosphere for polar trajectory
-cira = atmosphere.CIRA86(latitude=70, month=1)
-state = solve(mach=mach, altitude=altitude, atm=cira)
-
-print(f"Trajectory Point: M={mach}, h={altitude/1000} km")
-print(f"Velocity:         {state.uvel:.0f} m/s")
-print(f"Stag. temp:       {state.temp_stag:.0f} K")
-```
-
-## CFD Preprocessing
-
-### Generating Boundary Conditions
-
-```python
-from flow_state import solve
-
-# Define simulation conditions
-state = solve(mach=7.0, altitude=30_000, atm="ussa76")
-
-# Access values for your solver
-print(f"# Freestream boundary conditions")
-print(f"mach = {state.mach}")
-print(f"pres = {state.pres}  # Pa")
-print(f"temp = {state.temp}  # K")
-print(f"dens = {state.dens}  # kg/m³")
-```
-
-## Batch Processing
-
-### Parameter Study
-
-```python
-from flow_state import solve
-
-# Mach number sweep
-machs = [5.0, 6.0, 7.0, 8.0, 10.0]
-altitude = 30_000
-
-print("Mach    U [m/s]    Re/m       T0 [K]")
-print("-" * 45)
-
-for mach in machs:
-    state = solve(mach=mach, altitude=altitude, atm="ussa76")
-    print(f"{mach:4.1f}    {state.uvel:7.1f}    {state.re1:.2e}    {state.temp_stag:.0f}")
-```
-
-## Comparison with Literature
-
-### Verify Against Anderson
-
-From Anderson's *Hypersonic and High-Temperature Gas Dynamics*:
-
-```python
-from flow_state import solve, isentropic
-
-# Given: M=10, altitude 30 km (USSA76)
-state = solve(mach=10.0, altitude=30_000, atm="ussa76")
-
-print(f"Freestream conditions at M=10, h=30 km:")
-print(f"  T = {state.temp:.2f} K")
-print(f"  p = {state.pres:.2f} Pa")
-print(f"  U = {state.uvel:.1f} m/s")
-
-print(f"\nStagnation conditions:")
-print(f"  T0 = {state.temp_stag:.1f} K")
-print(f"  p0 = {state.pres_stag:.0f} Pa")
-
-print(f"\nIsentropic ratios:")
-print(f"  T0/T = {isentropic.temperature_ratio(10.0, 1.4):.2f}")
-print(f"  p0/p = {isentropic.pressure_ratio(10.0, 1.4):.1f}")
-```

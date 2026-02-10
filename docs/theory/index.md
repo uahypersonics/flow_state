@@ -1,6 +1,11 @@
 # Theory
 
-This page summarizes the gas dynamics equations used in `flow_state`. All relations assume a calorically perfect gas with constant specific heat ratio \(\gamma\).
+This page summarizes the equations used in `flow_state`. The relations below assume a calorically perfect gas with constant specific heat ratio \(\gamma\). Temperature-dependent gas models (Park vibrational excitation, Tannehill equilibrium air) are also available.
+
+See also:
+
+- [Transport Models](transport.md): Viscosity laws (Sutherland, Keyes, etc.)
+- [Atmosphere Models](atmosphere-models.md): USSA76 and CIRA86
 
 ## Ideal Gas Law
 
@@ -13,11 +18,11 @@ p = \rho R T
 where:
 
 - \(p\) = pressure [Pa]
-- \(\rho\) = density [kg/m³]
-- \(R\) = specific gas constant [J/(kg·K)]
+- \(\rho\) = density [kg/m^3]
+- \(R\) = specific gas constant [J/(kg-K)]
 - \(T\) = temperature [K]
 
-For air: \(R = 287.05\) J/(kg·K)
+For air: \(R = 287.05\) J/(kg-K)
 
 ## Speed of Sound
 
@@ -57,21 +62,7 @@ The unit Reynolds number (Reynolds number per unit length):
 \text{Re}_1 = \frac{\rho U}{\mu} = \frac{\rho U L}{\mu L} = \frac{\text{Re}}{L}
 \]
 
-where \(\mu\) is the dynamic viscosity.
-
-## Sutherland's Law
-
-Dynamic viscosity as a function of temperature:
-
-\[
-\mu = \mu_{\text{ref}} \left( \frac{T}{T_{\text{ref}}} \right)^{3/2} \frac{T_{\text{ref}} + S}{T + S}
-\]
-
-For air:
-
-- \(\mu_{\text{ref}} = 1.716 \times 10^{-5}\) Pa·s
-- \(T_{\text{ref}} = 273.15\) K  
-- \(S = 110.4\) K (Sutherland temperature)
+where \(\mu\) is the dynamic viscosity. See [Transport Models](transport.md) for viscosity laws.
 
 ## Isentropic Relations
 
@@ -180,7 +171,7 @@ For isothermal layers (\(\lambda = 0\)):
 p = p_b \exp\left( -\frac{g_0 (h - h_b)}{R T_b} \right)
 \]
 
-where \(g_0 = 9.80665\) m/s² is standard gravity.
+where \(g_0 = 9.80665\) m/s^2 is standard gravity.
 
 ## References
 
