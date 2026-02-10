@@ -1,30 +1,39 @@
-# Streamlit Webapp for flow_state
+# flow_state Webapp
 
-This is a minimal web interface for computing flow states using Streamlit.
+Web interface for computing compressible flow states using Streamlit.
 
-## Installation
+## Local Development
 
 ```bash
 cd apps/webapp
 pip install -r requirements.txt
-```
-
-**Note:** You must also have `flow_state` installed:
-```bash
-pip install -e ../..
-```
-
-## Running the App
-
-```bash
 streamlit run app.py
 ```
 
-The app will open in your browser at http://localhost:8501.
+Opens at http://localhost:8501
 
 ## Features
 
-- Select gas model (air, nitrogen, or custom)
-- Input pressure, temperature, and Mach number
-- View computed flow properties
-- Download results as TOML file
+**Input Modes:**
+
+- Static conditions (M, p, T)
+- Stagnation conditions (M, p₀, T₀)
+- Altitude-based (M, h) with USSA76/CIRA86
+
+**Gas Models:**
+
+- Air
+- Nitrogen
+- Custom (γ, R)
+
+**Output:**
+
+- Static and stagnation conditions
+- Transport properties
+- Reynolds numbers
+- Download as JSON or TOML
+
+## Deployment
+
+Deploy to [Streamlit Cloud](https://streamlit.io/cloud) by connecting your GitHub repo and pointing to `apps/webapp/app.py`.
+
