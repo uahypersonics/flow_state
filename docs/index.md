@@ -26,6 +26,12 @@ state = solve(mach=7.0, pres=1000.0, temp=200.0)
 print(state)
 ```
 
+## Webapp
+
+Try the interactive flow calculator online—no installation required.
+
+[Launch Webapp](https://flow-state-calculator.streamlit.app/)
+
 ## Why flow_state?
 
 Specify the known quantities (Mach, altitude, Re, etc.), `flow_state` computes the rest.
