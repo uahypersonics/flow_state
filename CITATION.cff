@@ -6,7 +6,7 @@ type: software
 authors:
   - family-names: "Hader"
     given-names: "Christoph"
-    affiliation: "University of Alabama in Huntsville"
+    affiliation: "University of Arizona"
     orcid: "https://orcid.org/0000-0002-0956-000X"
 repository-code: "https://github.com/uahypersonics/flow_state"
 url: "https://uahypersonics.github.io/flow_state"
