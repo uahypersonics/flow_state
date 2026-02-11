@@ -4,10 +4,9 @@
 
 ## Features
 
-- **Webapp**: [Try it online](https://flow-state-calculator.streamlit.app/) - no installation required
 - **CLI**: Quick calculations from the terminal
 - **API**: Enables scripting and automation
-- **Atmosphere models**: USSA76 and CIRA86 (latitude/season dependent)
+- [**Webapp**](https://flow-state-calculator.streamlit.app/): No installation required
 
 ## Quick Start
 
@@ -28,7 +27,7 @@ print(state)
 
 ## Webapp
 
-Try the interactive flow calculator online—no installation required.
+Interactive flow calculator online (no installation required).
 
 [Launch Webapp](https://flow-state-calculator.streamlit.app/)
 
