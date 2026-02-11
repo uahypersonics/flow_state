@@ -7,7 +7,7 @@
 ## From PyPI
 
 ```bash
-pip install flow-state
+pip install flow-state-calculator
 ```
 
 ## From Source

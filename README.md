@@ -9,7 +9,7 @@ Compressible flow state calculations for Python.
 ## Install
 
 ```bash
-pip install flow-state
+pip install flow-state-calculator
 ```
 
 ## Quick Start

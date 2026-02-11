@@ -12,7 +12,7 @@
 
 Install package (see [Installation](installation.md) for detailed instructions).
 ```bash
-pip install flow-state
+pip install flow-state-calculator
 ```
 
 Use `flow_state` package (see [User Guide](user-guide/index.md) for detailed examples)
