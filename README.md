@@ -68,16 +68,7 @@ Full documentation: https://uahypersonics.github.io/flow_state
 
 ## Citation
 
-If you use `flow_state` in your research, please cite it using the "Cite this repository" button on GitHub, or:
-
-```bibtex
-@software{flow_state,
-  title = {flow_state: Compressible Flow State Calculations},
-  author = {Hader, Christoph},
-  year = {2026},
-  url = {https://github.com/uahypersonics/flow_state}
-}
-```
+If you use `flow_state` in your research, please cite it using the "Cite this repository" button on GitHub.
 
 ## License
 
