@@ -82,6 +82,20 @@ If you use `flow_state` in your research, please cite it:
 }
 ```
 
+## Releasing
+
+To publish a new version to [PyPI](https://pypi.org/project/flow-state-calculator/):
+
+1. Update the version in `src/flow_state/_version.py`
+2. Commit and push to `main`
+3. Tag and push:
+   ```bash
+   git tag v0.x.x
+   git push origin v0.x.x
+   ```
+
+The GitHub Actions workflow will automatically build and publish to PyPI via Trusted Publishing.
+
 ## License
 
 BSD-3-Clause. See [LICENSE](LICENSE) for details.
