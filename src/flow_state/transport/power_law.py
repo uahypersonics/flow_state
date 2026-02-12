@@ -56,16 +56,21 @@ class PowerLaw:
     # methods to compute viscosity
     # --------------------------------------------------
 
-    # dynamic viscosity
-    def visc_dyn(self, temp: float) -> float:
-        """Compute dynamic viscosity [Pa s] at temperature temp [K]."""
+    def mu(self, temp: float) -> float:
+        """Dynamic viscosity [Pa s] at temperature temp [K]."""
         if temp <= 0:
             raise ValueError(f"Temperature must be positive, got {temp} K")
         return self.mu_ref * (temp / self.T_ref) ** self.m
 
-    # kinematic viscosity
-    def visc_kin(self, temp: float, dens: float) -> float:
-        """Compute kinematic viscosity [m^2/s]."""
+    def dmudt(self, temp: float) -> float:
+        """Derivative of dynamic viscosity w.r.t. temperature [Pa s / K]."""
+        if temp <= 0:
+            raise ValueError(f"Temperature must be positive, got {temp} K")
+        # d/dT [mu_ref * (T/T_ref)^m] = mu_ref * m * (T/T_ref)^(m-1) / T_ref = m * mu / T
+        return self.m * self.mu(temp) / temp
+
+    def nu(self, temp: float, dens: float) -> float:
+        """Kinematic viscosity [m^2/s]."""
         if dens <= 0:
             raise ValueError(f"Density must be positive, got {dens} kg/m^3")
-        return self.visc_dyn(temp) / dens
+        return self.mu(temp) / dens

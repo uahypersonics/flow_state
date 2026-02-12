@@ -68,10 +68,10 @@ def write_flow_conditions_dat(
         lines.append(f"uvel = {state.uvel:.6f}")
 
     # Write transport properties
-    if state.visc_dyn is not None:
-        lines.append(f"visc_dyn = {state.visc_dyn:.6e}")
-    if state.visc_kin is not None:
-        lines.append(f"visc_kin = {state.visc_kin:.6e}")
+    if state.mu is not None:
+        lines.append(f"mu = {state.mu:.6e}")
+    if state.nu is not None:
+        lines.append(f"nu = {state.nu:.6e}")
     if state.pr is not None:
         lines.append(f"pr = {state.pr:.6f}")
     if state.re1 is not None:

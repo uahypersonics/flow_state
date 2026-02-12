@@ -21,10 +21,10 @@ class TransportModel(Protocol):
 
     name: str
 
-    def visc_dyn(self, temp: float) -> float:
+    def mu(self, temp: float) -> float:
         """Compute dynamic viscosity [Pa s] at temperature temp [K]."""
         ...
 
-    def visc_kin(self, temp: float, dens: float) -> float:
+    def nu(self, temp: float, dens: float) -> float:
         """Compute kinematic viscosity [m^2/s] at temp [K] and dens [kg/m^3]."""
         ...

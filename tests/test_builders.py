@@ -70,12 +70,12 @@ class TestSolveStaticConditions:
         state = solve(pres=101325.0, temp=300.0, gas=air, transport=sutherland)
 
         assert state.transport_model == sutherland.name
-        assert state.visc_dyn is not None
-        assert state.visc_kin is not None
-        assert state.visc_dyn > 0
-        assert state.visc_kin > 0
-        # check visc_dyn is consistent with transport model
-        assert state.visc_dyn == pytest.approx(sutherland.visc_dyn(300.0), rel=1e-6)
+        assert state.mu is not None
+        assert state.nu is not None
+        assert state.mu > 0
+        assert state.nu > 0
+        # check mu is consistent with transport model
+        assert state.mu == pytest.approx(sutherland.mu(300.0), rel=1e-6)
 
     def test_notes_included(self) -> None:
         """notes field is preserved"""
@@ -123,8 +123,8 @@ class TestFromMPT:
         state = from_mach_pres_temp(mach=2.0, pres=101325.0, temp=300.0, gas=air, transport=sutherland)
 
         assert state.re1 is not None
-        # re1 = dens * uvel / visc_dyn
-        expected_Re = state.dens * state.uvel / state.visc_dyn
+        # re1 = dens * uvel / mu
+        expected_Re = state.dens * state.uvel / state.mu
         assert state.re1 == pytest.approx(expected_Re, rel=1e-6)
 
     def test_provenance_recorded(self) -> None:
@@ -220,11 +220,11 @@ class TestFromMachPressStagTempStag:
             mach=2.0, pres_stag=101325.0, temp_stag=300.0, gas=air, transport=sutherland
         )
 
-        assert state.visc_dyn is not None
-        assert state.visc_kin is not None
+        assert state.mu is not None
+        assert state.nu is not None
         assert state.re1 is not None
         # viscosity should be evaluated at static temperature
-        assert state.visc_dyn == pytest.approx(sutherland.visc_dyn(state.temp), rel=1e-6)
+        assert state.mu == pytest.approx(sutherland.mu(state.temp), rel=1e-6)
 
     def test_provenance_recorded(self) -> None:
         """provenance records stagnation inputs"""
@@ -312,7 +312,7 @@ class TestFromMachAltitudeAtmosphere:
             altitude=15000, mach=2.5, gas=air, transport=sutherland
         )
 
-        assert state.visc_dyn is not None
+        assert state.mu is not None
         assert state.re1 is not None
 
     def test_provenance_recorded(self) -> None:

@@ -47,10 +47,10 @@ def get_transport_model(name: str, **kwargs: Any) -> TransportModel:
 
     Example:
         >>> model = get_transport_model("sutherland")  # uses .air() preset
-        >>> mu = model.visc_dyn(300)
+        >>> mu = model.mu(300)
 
         >>> model = get_transport_model("keyes")
-        >>> mu = model.visc_dyn(2000)  # high temperature
+        >>> mu = model.mu(2000)  # high temperature
     """
     key = name.lower()
     if key not in MODELS:

@@ -66,8 +66,8 @@ def _compute_re1(
     dens = gas.density(pres, temp)
     a = gas.sound_speed(temp)
     uvel = mach * a
-    visc_dyn = transport.visc_dyn(temp)
-    return dens * uvel / visc_dyn
+    mu = transport.mu(temp)
+    return dens * uvel / mu
 
 
 # --------------------------------------------------
@@ -103,19 +103,19 @@ def _build_state(
         mach = uvel / a if a > 0 else None
 
     # transport properties
-    visc_dyn = None
-    visc_kin = None
+    mu = None
+    nu = None
     re1 = None
     computed_pr = pr
 
     if transport is not None:
-        visc_dyn = transport.visc_dyn(temp)
-        visc_kin = transport.visc_kin(temp, dens)
+        mu = transport.mu(temp)
+        nu = transport.nu(temp, dens)
         if computed_pr is None:
             computed_pr = 0.72
         # compute re1 if we have velocity
-        if uvel is not None and visc_dyn > 0:
-            re1 = dens * uvel / visc_dyn
+        if uvel is not None and mu > 0:
+            re1 = dens * uvel / mu
 
     # stagnation conditions (if mach is known)
     pres_stag = None
@@ -134,9 +134,9 @@ def _build_state(
     kol = None
     tay = None
 
-    if visc_kin is not None and uvel is not None and uvel > 0:
-        kol = kolmogorov_scales(visc_kin, uvel, lref)
-        tay = taylor_scales(visc_kin, uvel, lref)
+    if nu is not None and uvel is not None and uvel > 0:
+        kol = kolmogorov_scales(nu, uvel, lref)
+        tay = taylor_scales(nu, uvel, lref)
 
     return FlowState(
         gas_model=gas.name,
@@ -147,8 +147,8 @@ def _build_state(
         a=a,
         mach=mach,
         uvel=uvel,
-        visc_dyn=visc_dyn,
-        visc_kin=visc_kin,
+        mu=mu,
+        nu=nu,
         re1=re1,
         cp=cp,
         cv=gas.cv(temp, pres),

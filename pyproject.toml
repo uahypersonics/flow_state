@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "flow-state-calculator"
 dynamic = ["version"]
-description = "Lightweight utility for constructing compressible flow states and reference conditions"
+description = "Lightweight utility for computing flow states"
 readme = "README.md"
 license = {text = "BSD-3-Clause"}
 requires-python = ">=3.11"

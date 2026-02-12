@@ -26,8 +26,8 @@ class FlowState:
     uvel: float           # Velocity [m/s]
     
     # transport
-    visc_dyn: float       # Dynamic viscosity [Pa-s]
-    visc_kin: float       # Kinematic viscosity [m^2/s]
+    mu: float       # Dynamic viscosity [Pa-s]
+    nu: float       # Kinematic viscosity [m^2/s]
     re1: float            # Unit Reynolds number [1/m]
     
     # gas properties
@@ -66,8 +66,8 @@ class FlowState:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `visc_dyn` | `float` | Dynamic viscosity [Pa-s] |
-| `visc_kin` | `float` | Kinematic viscosity [m^2/s] |
+| `mu` | `float` | Dynamic viscosity [Pa-s] |
+| `nu` | `float` | Kinematic viscosity [m^2/s] |
 | `re1` | `float` | Unit Reynolds number [1/m] |
 
 ### Stagnation Conditions

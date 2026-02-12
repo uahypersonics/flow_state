@@ -107,6 +107,29 @@ Simple power-law model [@white2006]:
 
 Useful for simplified analyses or specific temperature ranges. Typical exponent \(m\) ranges from 0.5 to 1.0.
 
+## Usage
+
+All transport models provide three methods:
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `mu(temp)` | `float` | Dynamic viscosity \(\mu\) [Pa s] |
+| `nu(temp, dens)` | `float` | Kinematic viscosity \(\nu = \mu / \rho\) [m^2/s] |
+| `dmudt(temp)` | `float` | Temperature derivative \(d\mu/dT\) [Pa s / K] |
+
+Example:
+
+```python
+from flow_state.transport import Sutherland
+
+model = Sutherland.air()
+T = 300.0  # K
+
+mu = model.mu(T)           # 1.85e-5 Pa s
+dmudt = model.dmudt(T)     # derivative for CFD applications
+nu = model.nu(T, rho=1.2)  # kinematic viscosity
+```
+
 ## References
 
 \bibliography

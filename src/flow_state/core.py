@@ -28,8 +28,8 @@ _UNITS: dict[str, str] = {
     "mach": "-",
     "uvel": "m/s",
     # transport
-    "visc_dyn": "Pa*s",
-    "visc_kin": "m^2/s",
+    "mu": "Pa*s",
+    "nu": "m^2/s",
     "re1": "1/m",
     # gas properties
     "cp": "J/(kg*K)",
@@ -77,8 +77,8 @@ class FlowState:
         - a: speed of sound [m/s]
         - mach: Mach number [-]
         - uvel: velocity [m/s]
-        - visc_dyn: dynamic viscosity [Pa*s]
-        - visc_kin: kinematic viscosity [m^2/s]
+        - mu: dynamic viscosity [Pa*s]
+        - nu: kinematic viscosity [m^2/s]
         - cp: specific heat at constant pressure [J/(kg K)]
         - cv: specific heat at constant volume [J/(kg K)]
         - gamma: ratio of specific heats [-]
@@ -114,8 +114,8 @@ class FlowState:
     uvel: float | None
 
     # transport properties (optional - None if no transport model)
-    visc_dyn: float | None
-    visc_kin: float | None
+    mu: float | None
+    nu: float | None
 
     # gas properties
     cp: float
@@ -214,8 +214,8 @@ class FlowState:
             "mach": self._with_unit("mach", self.mach),
             "uvel": self._with_unit("uvel", self.uvel),
             # transport
-            "visc_dyn": self._with_unit("visc_dyn", self.visc_dyn),
-            "visc_kin": self._with_unit("visc_kin", self.visc_kin),
+            "mu": self._with_unit("mu", self.mu),
+            "nu": self._with_unit("nu", self.nu),
             "re1": self._with_unit("re1", self.re1),
             # gas properties
             "cp": self._with_unit("cp", self.cp),

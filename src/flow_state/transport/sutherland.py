@@ -72,21 +72,27 @@ class Sutherland:
     # methods to compute viscosity
     # --------------------------------------------------
 
-    # dynamic viscosity
-    def visc_dyn(self, temp: float) -> float:
-        """Compute dynamic viscosity [Pa s] at temperature temp [K]."""
+    def mu(self, temp: float) -> float:
+        """Dynamic viscosity [Pa s] at temperature temp [K]."""
         if temp <= 0:
             raise ValueError(f"Temperature must be positive, got {temp} K")
         ratio = (temp / self.T_ref) ** 1.5
         factor = (self.T_ref + self.S) / (temp + self.S)
         return self.mu_ref * ratio * factor
 
-    # kinematic viscosity
-    def visc_kin(self, temp: float, dens: float) -> float:
-        """Compute kinematic viscosity [m^2/s] at temperature temp [K] and density dens [kg/m^3]."""
+    def dmudt(self, temp: float) -> float:
+        """Derivative of dynamic viscosity w.r.t. temperature [Pa s / K]."""
+        if temp <= 0:
+            raise ValueError(f"Temperature must be positive, got {temp} K")
+        # d/dT [mu_ref * (T/T_ref)^1.5 * (T_ref + S)/(T + S)]
+        c1 = self.mu_ref * (self.T_ref + self.S) / self.T_ref**1.5
+        return c1 * temp**0.5 * (0.5 * temp + 1.5 * self.S) / (temp + self.S)**2
+
+    def nu(self, temp: float, dens: float) -> float:
+        """Kinematic viscosity [m^2/s] at temperature temp [K] and density dens [kg/m^3]."""
         if dens <= 0:
             raise ValueError(f"Density must be positive, got {dens} kg/m^3")
-        return self.visc_dyn(temp) / dens
+        return self.mu(temp) / dens
 
 
 # --------------------------------------------------
@@ -137,9 +143,8 @@ class SutherlandLowTemp:
     # methods to compute viscosity
     # --------------------------------------------------
 
-    # dynamic viscosity
-    def visc_dyn(self, temp: float) -> float:
-        """Compute dynamic viscosity [Pa s] at temperature temp [K]."""
+    def mu(self, temp: float) -> float:
+        """Dynamic viscosity [Pa s] at temperature temp [K]."""
         if temp <= 0:
             raise ValueError(f"Temperature must be positive, got {temp} K")
 
@@ -153,12 +158,27 @@ class SutherlandLowTemp:
             # Standard Sutherland above T2
             return self.c1 * temp ** 1.5 / (temp + self.S)
 
-    # kinematic viscosity
-    def visc_kin(self, temp: float, dens: float) -> float:
-        """Compute kinematic viscosity [m^2/s]."""
+    def dmudt(self, temp: float) -> float:
+        """Derivative of dynamic viscosity w.r.t. temperature [Pa s / K]."""
+        if temp <= 0:
+            raise ValueError(f"Temperature must be positive, got {temp} K")
+
+        if temp < self.T1:
+            # Constant below T1
+            return 0.0
+        elif temp <= self.T2:
+            # Linear between T1 and T2
+            return self.c2
+        else:
+            # Standard Sutherland above T2
+            # d/dT [c1 * T^1.5 / (T + S)]
+            return self.c1 * temp**0.5 * (0.5 * temp + 1.5 * self.S) / (temp + self.S)**2
+
+    def nu(self, temp: float, dens: float) -> float:
+        """Kinematic viscosity [m^2/s]."""
         if dens <= 0:
             raise ValueError(f"Density must be positive, got {dens} kg/m^3")
-        return self.visc_dyn(temp) / dens
+        return self.mu(temp) / dens
 
 
 # --------------------------------------------------
@@ -218,9 +238,8 @@ class SutherlandBlended:
     # methods to compute viscosity
     # --------------------------------------------------
 
-    # dynamic viscosity
-    def visc_dyn(self, temp: float) -> float:
-        """Compute dynamic viscosity [Pa s] at temperature temp [K]."""
+    def mu(self, temp: float) -> float:
+        """Dynamic viscosity [Pa s] at temperature temp [K]."""
         if temp <= 0:
             raise ValueError(f"Temperature must be positive, got {temp} K")
 
@@ -245,9 +264,33 @@ class SutherlandBlended:
             # Linear
             return self.c2 * temp
 
-    # kinematic viscosity
-    def visc_kin(self, temp: float, dens: float) -> float:
-        """Compute kinematic viscosity [m^2/s]."""
+    def dmudt(self, temp: float) -> float:
+        """Derivative of dynamic viscosity w.r.t. temperature [Pa s / K]."""
+        if temp <= 0:
+            raise ValueError(f"Temperature must be positive, got {temp} K")
+
+        if temp > 130.0:
+            # Standard Sutherland
+            return self.c1 * temp**0.5 * (0.5 * temp + 1.5 * self.S) / (temp + self.S)**2
+        elif temp > 100.0:
+            # Polynomial blend derivative
+            t_norm = temp / self.S
+            dvisc_dt_norm = (
+                7 * self._a1 * t_norm**6
+                + 6 * self._a2 * t_norm**5
+                + 5 * self._a3 * t_norm**4
+                + 4 * self._a4 * t_norm**3
+                + 3 * self._a5 * t_norm**2
+                + 2 * self._a6 * t_norm
+                + self._a7
+            )
+            return dvisc_dt_norm * self._visc0 / self.S
+        else:
+            # Linear
+            return self.c2
+
+    def nu(self, temp: float, dens: float) -> float:
+        """Kinematic viscosity [m^2/s]."""
         if dens <= 0:
             raise ValueError(f"Density must be positive, got {dens} kg/m^3")
-        return self.visc_dyn(temp) / dens
+        return self.mu(temp) / dens

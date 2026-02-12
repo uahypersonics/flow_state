@@ -77,9 +77,9 @@ def display_results(state) -> None:
     add_row("cp", state.cp, "J/(kg K)", ".2f")
 
     # Transport properties
-    if state.visc_dyn is not None:
-        add_row("Dynamic Viscosity", state.visc_dyn, "Pa s")
-        add_row("Kinematic Viscosity", state.visc_kin, "m²/s")
+    if state.mu is not None:
+        add_row("Dynamic Viscosity", state.mu, "Pa s")
+        add_row("Kinematic Viscosity", state.nu, "m²/s")
         add_row("Unit Reynolds", state.re1, "1/m")
 
     # Reference-based

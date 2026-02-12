@@ -29,10 +29,10 @@ def summary(state: FlowState) -> str:
         lines.append(f"  mach     = {state.mach:.4f}")
     if state.uvel is not None:
         lines.append(f"  uvel     = {state.uvel:.2f} m/s")
-    if state.visc_dyn is not None:
-        lines.append(f"  visc_dyn = {state.visc_dyn:.4e} Pa*s")
-    if state.visc_kin is not None:
-        lines.append(f"  visc_kin = {state.visc_kin:.4e} m^2/s")
+    if state.mu is not None:
+        lines.append(f"  mu = {state.mu:.4e} Pa*s")
+    if state.nu is not None:
+        lines.append(f"  nu = {state.nu:.4e} m^2/s")
 
     lines.extend([
         f"  cp       = {state.cp:.2f} J/(kg K)",

@@ -64,18 +64,32 @@ class Keyes:
     # methods to compute viscosity
     # --------------------------------------------------
 
-    # dynamic viscosity
-    def visc_dyn(self, temp: float) -> float:
-        """Compute dynamic viscosity [Pa s] at temperature temp [K]."""
+    def mu(self, temp: float) -> float:
+        """Dynamic viscosity [Pa s] at temperature temp [K]."""
         if temp <= 0:
             raise ValueError(f"Temperature must be positive, got {temp} K")
 
         exp_term = 10.0 ** (-self.a2 / temp)
         return self.a0 * math.sqrt(temp) / (1.0 + self.a1 * exp_term / temp)
 
-    # kinematic viscosity
-    def visc_kin(self, temp: float, dens: float) -> float:
-        """Compute kinematic viscosity [m^2/s]."""
+    def dmudt(self, temp: float) -> float:
+        """Derivative of dynamic viscosity w.r.t. temperature [Pa s / K]."""
+        if temp <= 0:
+            raise ValueError(f"Temperature must be positive, got {temp} K")
+
+        # mu = a0 * T^0.5 / D, where D = 1 + a1 * 10^(-a2/T) / T
+        exp_term = 10.0 ** (-self.a2 / temp)
+        D = 1.0 + self.a1 * exp_term / temp
+
+        # dD/dT = a1 * 10^(-a2/T) * (a2 * ln(10) - T) / T^3
+        ln10 = math.log(10.0)
+        dD_dT = self.a1 * exp_term * (self.a2 * ln10 - temp) / temp**3
+
+        # d(mu)/dT = a0 * [0.5 * T^-0.5 / D - T^0.5 * dD/dT / D^2]
+        return self.a0 * (0.5 / (math.sqrt(temp) * D) - math.sqrt(temp) * dD_dT / D**2)
+
+    def nu(self, temp: float, dens: float) -> float:
+        """Kinematic viscosity [m^2/s]."""
         if dens <= 0:
             raise ValueError(f"Density must be positive, got {dens} kg/m^3")
-        return self.visc_dyn(temp) / dens
+        return self.mu(temp) / dens

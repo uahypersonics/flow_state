@@ -103,14 +103,14 @@ class TestKolmogorovScales:
     def test_negative_viscosity_raises(self) -> None:
         """negative viscosity raises error"""
         with pytest.raises(ValueError):
-            kolmogorov_scales(visc_kin=-1e-5, uvel=100, lref=1.0)
+            kolmogorov_scales(nu=-1e-5, uvel=100, lref=1.0)
 
     def test_negative_velocity_raises(self) -> None:
         """negative velocity raises error"""
         with pytest.raises(ValueError):
-            kolmogorov_scales(visc_kin=1e-5, uvel=-100, lref=1.0)
+            kolmogorov_scales(nu=1e-5, uvel=-100, lref=1.0)
 
     def test_negative_length_raises(self) -> None:
         """negative length raises error"""
         with pytest.raises(ValueError):
-            kolmogorov_scales(visc_kin=1e-5, uvel=100, lref=-1.0)
+            kolmogorov_scales(nu=1e-5, uvel=100, lref=-1.0)

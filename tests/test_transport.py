@@ -56,14 +56,14 @@ class TestSutherland:
     def test_mu_at_reference_temperature(self) -> None:
         """mu(T_ref) returns mu_ref"""
         air = Sutherland.air()
-        mu = air.visc_dyn(temp=273.15)
+        mu = air.mu(temp=273.15)
         # at reference temperature, should get reference viscosity
         assert mu == pytest.approx(air.mu_ref, rel=1e-6)
 
     def test_mu_at_300K_air(self) -> None:
         """viscosity at 300 K for air ≈ 1.85e-5 Pa·s"""
         air = Sutherland.air()
-        mu = air.visc_dyn(temp=300.0)
+        mu = air.mu(temp=300.0)
         # order of magnitude check
         assert 1e-6 < mu < 1e-4
         # more specific check (literature: ~1.85e-5 Pa·s)
@@ -72,33 +72,50 @@ class TestSutherland:
     def test_mu_at_200K_air(self) -> None:
         """viscosity at 200 K for air ≈ 1.33e-5 Pa·s"""
         air = Sutherland.air()
-        mu = air.visc_dyn(temp=200.0)
+        mu = air.mu(temp=200.0)
         # should be positive and reasonable
         assert 1e-6 < mu < 1e-4
         # should be less than mu at 300 K
-        mu_300 = air.visc_dyn(temp=300.0)
+        mu_300 = air.mu(temp=300.0)
         assert mu < mu_300
 
     def test_mu_increases_with_temperature(self) -> None:
         """viscosity increases with temperature"""
         air = Sutherland.air()
         temps = [200, 300, 400, 500, 600]
-        mus = [air.visc_dyn(T) for T in temps]
+        mus = [air.mu(T) for T in temps]
         # each mu should be greater than the previous
         for i in range(1, len(mus)):
             assert mus[i] > mus[i - 1]
+
+    def test_dmudt_finite_difference(self) -> None:
+        """dmudt matches finite difference approximation"""
+        air = Sutherland.air()
+        T = 300.0
+        dT = 0.01
+        # finite difference
+        dmudt_fd = (air.mu(T + dT) - air.mu(T - dT)) / (2 * dT)
+        # analytical
+        dmudt_analytical = air.dmudt(T)
+        assert dmudt_analytical == pytest.approx(dmudt_fd, rel=1e-5)
+
+    def test_dmudt_positive(self) -> None:
+        """dmudt is positive (viscosity increases with temperature)"""
+        air = Sutherland.air()
+        for T in [200, 300, 400, 500]:
+            assert air.dmudt(T) > 0
 
     def test_mu_negative_temperature_raises(self) -> None:
         """negative temperature raises ValueError"""
         air = Sutherland.air()
         with pytest.raises(ValueError, match="positive"):
-            air.visc_dyn(temp=-100)
+            air.mu(temp=-100)
 
     def test_mu_zero_temperature_raises(self) -> None:
         """zero temperature raises ValueError"""
         air = Sutherland.air()
         with pytest.raises(ValueError, match="positive"):
-            air.visc_dyn(temp=0)
+            air.mu(temp=0)
 
     def test_nu_calculation(self) -> None:
         """kinematic viscosity calculation"""
@@ -106,8 +123,8 @@ class TestSutherland:
         T = 300.0
         rho = 1.177  # approximate air density at 300 K, 1 atm
 
-        mu = air.visc_dyn(T)
-        nu = air.visc_kin(T, rho)
+        mu = air.mu(T)
+        nu = air.nu(T, rho)
 
         # nu = mu / rho
         assert nu == pytest.approx(mu / rho, rel=1e-6)
@@ -116,7 +133,7 @@ class TestSutherland:
         """negative density raises ValueError"""
         air = Sutherland.air()
         with pytest.raises(ValueError, match="positive"):
-            air.visc_kin(temp=300, dens=-1.0)
+            air.nu(temp=300, dens=-1.0)
 
 
 # --------------------------------------------------
@@ -139,7 +156,7 @@ class TestSutherlandLowTemp:
 
         # at 300 K (well above T2=110.4 K)
         T = 300.0
-        mu_low = low_temp.visc_dyn(T)
+        mu_low = low_temp.mu(T)
         # standard Sutherland formula: c1 * T^1.5 / (T + S)
         mu_std = low_temp.c1 * T**1.5 / (T + low_temp.S)
 
@@ -150,8 +167,8 @@ class TestSutherlandLowTemp:
         model = SutherlandLowTemp.air()
 
         T1, T2 = 50.0, 80.0  # both in linear region
-        mu1 = model.visc_dyn(T1)
-        mu2 = model.visc_dyn(T2)
+        mu1 = model.mu(T1)
+        mu2 = model.mu(T2)
 
         # should be linear: mu = c2 * T
         assert mu1 == pytest.approx(model.c2 * T1, rel=1e-6)
@@ -162,7 +179,7 @@ class TestSutherlandLowTemp:
         model = SutherlandLowTemp.air()
 
         T_low = 20.0  # below T1=40 K
-        mu = model.visc_dyn(T_low)
+        mu = model.mu(T_low)
 
         # should be frozen at T1 value
         expected = model.c2 * model.T1
@@ -172,8 +189,8 @@ class TestSutherlandLowTemp:
         """check continuity at T2 boundary"""
         model = SutherlandLowTemp.air()
 
-        mu_below = model.visc_dyn(model.T2 - 0.01)
-        mu_above = model.visc_dyn(model.T2 + 0.01)
+        mu_below = model.mu(model.T2 - 0.01)
+        mu_above = model.mu(model.T2 + 0.01)
 
         # should be nearly continuous
         assert abs(mu_above - mu_below) / mu_below < 0.01
@@ -197,7 +214,7 @@ class TestSutherlandBlended:
         model = SutherlandBlended.air()
 
         T = 300.0
-        mu = model.visc_dyn(T)
+        mu = model.mu(T)
         expected = model.c1 * T**1.5 / (T + model.S)
 
         assert mu == pytest.approx(expected, rel=1e-6)
@@ -207,7 +224,7 @@ class TestSutherlandBlended:
         model = SutherlandBlended.air()
 
         T = 80.0
-        mu = model.visc_dyn(T)
+        mu = model.mu(T)
         expected = model.c2 * T
 
         assert mu == pytest.approx(expected, rel=1e-6)
@@ -217,7 +234,7 @@ class TestSutherlandBlended:
         model = SutherlandBlended.air()
 
         temps = [100, 105, 110, 115, 120, 125, 130]
-        mus = [model.visc_dyn(T) for T in temps]
+        mus = [model.mu(T) for T in temps]
 
         # should be monotonically increasing
         for i in range(1, len(mus)):
@@ -251,7 +268,7 @@ class TestKeyes:
         model = Keyes.air()
 
         temps = [200, 400, 600, 800, 1000]
-        mus = [model.visc_dyn(T) for T in temps]
+        mus = [model.mu(T) for T in temps]
 
         for i in range(1, len(mus)):
             assert mus[i] > mus[i - 1]
@@ -259,7 +276,7 @@ class TestKeyes:
     def test_reasonable_values_at_300K(self) -> None:
         """reasonable viscosity at 300 K"""
         model = Keyes.air()
-        mu = model.visc_dyn(300.0)
+        mu = model.mu(300.0)
 
         # should be same order as Sutherland (~1.8e-5)
         assert 1e-5 < mu < 3e-5
@@ -267,7 +284,7 @@ class TestKeyes:
     def test_high_temperature(self) -> None:
         """at high temperature (hypersonic regime)"""
         model = Keyes.air()
-        mu = model.visc_dyn(2000.0)
+        mu = model.mu(2000.0)
 
         # should still be reasonable
         assert 1e-5 < mu < 1e-4
@@ -294,7 +311,7 @@ class TestPowerLaw:
     def test_mu_at_reference(self) -> None:
         """at T_ref, get mu_ref"""
         model = PowerLaw.air()
-        mu = model.visc_dyn(model.T_ref)
+        mu = model.mu(model.T_ref)
         assert mu == pytest.approx(model.mu_ref, rel=1e-6)
 
     def test_power_law_scaling(self) -> None:
@@ -304,8 +321,8 @@ class TestPowerLaw:
         T1 = 200.0
         T2 = 400.0
 
-        mu1 = model.visc_dyn(T1)
-        mu2 = model.visc_dyn(T2)
+        mu1 = model.mu(T1)
+        mu2 = model.mu(T2)
 
         # mu2/mu1 should equal (T2/T1)^m
         expected_ratio = (T2 / T1) ** model.m
