@@ -13,6 +13,7 @@ site_description: Utility for calculating flow states (e.g., temperature, pressu
 # --------------------------------------------------
 repo_name: uahypersonics/flow_state
 repo_url: https://github.com/uahypersonics/flow_state
+edit_uri: edit/main/docs/
 
 # --------------------------------------------------
 # theme configuration
@@ -49,6 +50,8 @@ theme:
     - navigation.top        # back-to-top button
     - content.code.copy     # copy button on code blocks
     - content.code.annotate # code annotations
+    - content.action.edit   # edit page link
+    - content.action.view   # view source link
 
 # --------------------------------------------------
 # plugins
