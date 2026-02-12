@@ -1,6 +1,6 @@
 # Transport Models
 
-Viscosity models available in `flow_state`. All models compute [dynamic viscosity](https://www.grc.nasa.gov/www/k-12/airplane/viscosity.html) \(\mu\) as a function of temperature.
+Viscosity models available in `flow_state`. All models compute [dynamic viscosity](https://www.grc.nasa.gov/www/k-12/airplane/viscosity.html) \(\mu\) as a function of temperature, as well as the temperature derivative \(d\mu/dT\).
 
 ## Overview
 
@@ -18,6 +18,12 @@ The standard Sutherland formula [@sutherland1893]:
 
 \[
 \mu(T) = \mu_{\text{ref}} \left( \frac{T}{T_{\text{ref}}} \right)^{3/2} \frac{T_{\text{ref}} + S}{T + S}
+\]
+
+The temperature derivative is:
+
+\[
+\frac{d\mu}{dT} = \frac{\mu_{\text{ref}} (T_{\text{ref}} + S)}{T_{\text{ref}}^{3/2}} \cdot \frac{\sqrt{T} \left( \frac{1}{2} T + \frac{3}{2} S \right)}{(T + S)^2}
 \]
 
 Valid for moderate temperatures (~100 K to ~1900 K for air).
@@ -46,6 +52,16 @@ where:
 - \(S = 110.4\) K
 - \(C_0 = 6.93873 \times 10^{-8}\) kg/(m·s·K)
 - \(T_1 = 40\) K
+
+The temperature derivative is:
+
+\[
+\frac{d\mu}{dT} = \begin{cases}
+0 & T < T_1 \\
+C_0 & T_1 \leq T \leq S \\
+\text{(Sutherland derivative)} & T > S
+\end{cases}
+\]
 
 ## Sutherland's Law with Low-Temperature Correction Blended (LTC-blended) {#sutherland_blended}
 
@@ -82,6 +98,12 @@ Polynomial coefficients:
 | 7 | \(-323.4667180557399\) |
 | 8 | \(45.8157988617632\) |
 
+The temperature derivative in the polynomial region (\(T_1 \leq T \leq T_2\)) is:
+
+\[
+\frac{d\mu}{dT} = \frac{a_0}{S} \sum_{i=1}^{7} (8-i) \, a_i \left( \frac{T}{S} \right)^{7-i}
+\]
+
 ## Keyes Model {#keyes}
 
 High-temperature viscosity law [@keyes1951] [@priebe2012] [@roy2006]:
@@ -97,12 +119,26 @@ Often used for hypersonic flows where temperatures can be very high.
 | Air | \(1.488 \times 10^{-6}\) | 122.1 | 5.0 |
 | Nitrogen | \(1.418 \times 10^{-6}\) | 116.4 | 5.0 |
 
+The temperature derivative is:
+
+\[
+\frac{d\mu}{dT} = a_0 \left( \frac{1}{2\sqrt{T} \cdot D} - \frac{\sqrt{T} \cdot D'}{D^2} \right)
+\]
+
+where \(D = 1 + a_1 \cdot 10^{-a_2/T} / T\) and \(D' = a_1 \cdot 10^{-a_2/T} (a_2 \ln 10 - T) / T^3\).
+
 ## Power Law {#power-law}
 
 Simple power-law model [@white2006]:
 
 \[
 \mu(T) = \mu_{\text{ref}} \left( \frac{T}{T_{\text{ref}}} \right)^m
+\]
+
+The temperature derivative is:
+
+\[
+\frac{d\mu}{dT} = \frac{m \, \mu_{\text{ref}}}{T_{\text{ref}}} \left( \frac{T}{T_{\text{ref}}} \right)^{m-1}
 \]
 
 Useful for simplified analyses or specific temperature ranges. Typical exponent \(m\) ranges from 0.5 to 1.0.
