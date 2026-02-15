@@ -86,14 +86,20 @@ If you use `flow_state` in your research, please cite it:
 
 ## Releasing
 
+This project uses [Semantic Versioning](https://semver.org/) (`vMAJOR.MINOR.PATCH`):
+
+- **MAJOR** (`v1.0.0`, `v2.0.0`): Breaking API changes
+- **MINOR** (`v0.3.0`, `v0.4.0`): New features, backward-compatible
+- **PATCH** (`v0.3.1`, `v0.3.2`): Bug fixes, minor corrections
+
 To publish a new version to [PyPI](https://pypi.org/project/flow-state-calculator/):
 
 1. Update the version in `src/flow_state/_version.py`
 2. Commit and push to `main`
 3. Tag and push:
    ```bash
-   git tag v0.x.x
-   git push origin v0.x.x
+   git tag vMAJOR.MINOR.PATCH
+   git push origin vMAJOR.MINOR.PATCH
    ```
 
 The GitHub Actions workflow will automatically build and publish to PyPI via Trusted Publishing.
