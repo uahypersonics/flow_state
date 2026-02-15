@@ -42,14 +42,12 @@ graph LR
     cli --> io
 
     %% ---- styling ----
-    classDef hub fill:#4a86c8,stroke:#2d5a8c,color:#fff
-    classDef leaf fill:#e8e8e8,stroke:#999,color:#333
-    classDef mid fill:#7ab648,stroke:#4a7a2a,color:#fff
+    classDef hub fill:#37474f,stroke:#263238,color:#fff
+    classDef mid fill:#546e7a,stroke:#37474f,color:#fff
+    classDef leaf fill:#78909c,stroke:#546e7a,color:#fff
 
     class solvers hub
-    class cli mid
-    class core mid
-    class io mid
+    class core,io,cli mid
     class gas,transport,atmosphere,isentropic,turbulence,units,math_utils leaf
 ```
 
