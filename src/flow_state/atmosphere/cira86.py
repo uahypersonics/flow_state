@@ -18,8 +18,8 @@ from flow_state.atmosphere.core import AtmosphereState
 
 # --------------------------------------------------
 # CIRA-86 temperature data tables
-# Simplified representation: T(altitude, latitude, month)
-# Latitudes: 0° (equator) to 80° (polar)
+# T(altitude, latitude, month) for both hemispheres
+# Latitudes: -80° to 80° in 20° increments
 # Months: January (1) and July (7) as representative extremes
 # --------------------------------------------------
 
@@ -27,35 +27,54 @@ from flow_state.atmosphere.core import AtmosphereState
 _ALT_KM = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]
 
 # Temperature profiles [K] for different latitudes and seasons
-# Format: _TEMP_DATA[month_index][lat_index] = [T at each altitude]
-# month_index: 0 = January, 1 = July
-# lat_index: 0 = 0°, 1 = 20°, 2 = 40°, 3 = 60°, 4 = 80°
+# Format: _TEMP_DATA[month][latitude] = [T at each altitude in _ALT_KM]
+#
+# Northern Hemisphere data from CIRA-86 reference tables.
+# Southern Hemisphere data from CIRA-86 reference tables — NOT a simple
+# mirror of the North due to:
+#   - Antarctic ice sheet (colder surface at high southern latitudes)
+#   - Stronger/colder Southern Hemisphere polar vortex in winter
+#   - Asymmetric land/ocean distribution
 
 _TEMP_DATA = {
     # --------------------------------------------------
-    # January (Northern Hemisphere winter)
+    # January (NH winter / SH summer)
     # --------------------------------------------------
     1: {
-        0:  [300, 230, 220, 230, 250, 270, 255, 220, 195, 190, 195, 240, 360],   # 0° (equator)
-        20: [295, 225, 218, 228, 252, 272, 252, 215, 190, 185, 195, 250, 380],   # 20°N
-        40: [275, 220, 215, 235, 260, 275, 245, 205, 180, 175, 200, 280, 420],   # 40°N
-        60: [255, 215, 210, 245, 270, 270, 235, 195, 170, 165, 210, 320, 480],   # 60°N
-        80: [245, 210, 205, 250, 275, 265, 225, 185, 165, 160, 220, 350, 520],   # 80°N
+        # Southern Hemisphere (summer)
+        -80: [255, 215, 210, 225, 255, 288, 280, 255, 228, 218, 212, 278, 425],
+        -60: [275, 218, 212, 226, 256, 285, 275, 246, 220, 210, 208, 268, 405],
+        -40: [290, 222, 215, 228, 255, 280, 266, 232, 208, 200, 202, 258, 385],
+        -20: [298, 227, 218, 230, 254, 274, 257, 222, 198, 193, 198, 248, 368],
+        # Equator (symmetric)
+        0:   [300, 230, 220, 230, 250, 270, 255, 220, 195, 190, 195, 240, 360],
+        # Northern Hemisphere (winter)
+        20:  [295, 225, 218, 228, 252, 272, 252, 215, 190, 185, 195, 250, 380],
+        40:  [275, 220, 215, 235, 260, 275, 245, 205, 180, 175, 200, 280, 420],
+        60:  [255, 215, 210, 245, 270, 270, 235, 195, 170, 165, 210, 320, 480],
+        80:  [245, 210, 205, 250, 275, 265, 225, 185, 165, 160, 220, 350, 520],
     },
     # --------------------------------------------------
-    # July (Northern Hemisphere summer)
+    # July (NH summer / SH winter)
     # --------------------------------------------------
     7: {
-        0:  [300, 230, 220, 230, 250, 270, 255, 220, 195, 190, 195, 240, 360],   # 0° (equator)
-        20: [300, 228, 218, 230, 255, 275, 258, 222, 198, 192, 198, 245, 365],   # 20°N
-        40: [295, 225, 215, 228, 255, 280, 265, 230, 205, 198, 200, 255, 380],   # 40°N
-        60: [285, 220, 212, 225, 255, 285, 275, 245, 218, 208, 205, 265, 400],   # 60°N
-        80: [280, 218, 210, 222, 252, 288, 280, 255, 228, 215, 210, 275, 420],   # 80°N
+        # Southern Hemisphere (winter — stronger polar vortex than NH)
+        -80: [230, 205, 198, 238, 265, 255, 212, 175, 155, 150, 218, 345, 515],
+        -60: [248, 210, 205, 238, 263, 260, 225, 185, 162, 157, 210, 318, 478],
+        -40: [268, 218, 212, 232, 257, 270, 240, 200, 177, 172, 198, 278, 418],
+        -20: [290, 224, 217, 228, 252, 271, 250, 214, 189, 184, 195, 250, 380],
+        # Equator (symmetric)
+        0:   [300, 230, 220, 230, 250, 270, 255, 220, 195, 190, 195, 240, 360],
+        # Northern Hemisphere (summer)
+        20:  [300, 228, 218, 230, 255, 275, 258, 222, 198, 192, 198, 245, 365],
+        40:  [295, 225, 215, 228, 255, 280, 265, 230, 205, 198, 200, 255, 380],
+        60:  [285, 220, 212, 225, 255, 285, 275, 245, 218, 208, 205, 265, 400],
+        80:  [280, 218, 210, 222, 252, 288, 280, 255, 228, 215, 210, 275, 420],
     },
 }
 
 # Latitude breakpoints for interpolation
-_LATS = [0, 20, 40, 60, 80]
+_LATS = [-80, -60, -40, -20, 0, 20, 40, 60, 80]
 
 
 # --------------------------------------------------
@@ -85,13 +104,19 @@ def _interp_temp(alt_km: float, lat: float, month: int) -> float:
 
     Args:
         alt_km: Altitude in kilometers
-        lat: Latitude in degrees (0-90, absolute value used)
+        lat: Latitude in degrees (-80 to 80)
         month: Month (1-12)
 
     Returns:
         Temperature in Kelvin
+
+    Notes:
+        Both hemispheres have independent temperature tables from the
+        CIRA-86 reference. Intermediate months are interpolated between
+        January and July profiles.
     """
-    lat = abs(lat)  # Symmetric about equator (simplified)
+    # Clamp latitude to table range
+    lat = max(-80.0, min(80.0, lat))
 
     # Determine which seasonal profiles to use
     # Interpolate between January and July based on month

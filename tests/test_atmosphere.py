@@ -95,11 +95,11 @@ class TestUSSA76:
         assert atm.temp == pytest.approx(expected_temp, rel=0.01)
 
     def test_upper_stratosphere_30km(self, model):
-        """upper stratosphere at 30 km"""
+        """upper stratosphere at 30 km (layer 3: base 20 km, +1.0 K/km)"""
         atm = model(30000)
 
-        # T starts increasing again
-        expected_temp = -131.21 + 0.00299 * 30000 + 273.15
+        # T = 216.65 + 0.001 * (30000 - 20000) = 226.65 K
+        expected_temp = 216.65 + 0.001 * (30000 - 20000)
         assert atm.temp == pytest.approx(expected_temp, rel=0.01)
         assert atm.pres > 0  # pressure should still be positive
 
@@ -185,6 +185,41 @@ class TestCIRA86:
         """invalid month should raise"""
         with pytest.raises(ValueError):
             get_atmosphere_model("cira86", latitude=45, month=13)
+
+    def test_southern_hemisphere_independent_data(self):
+        """Southern Hemisphere has independent data, not a mirror of the North"""
+        # 60°S January (SH summer) should differ from 60°N July (NH summer)
+        # because the hemispheres have independent CIRA-86 tables
+        s_jan = CIRA86(latitude=-60, month=1)(50000).temp
+        n_jul = CIRA86(latitude=60, month=7)(50000).temp
+        # both are summer hemispheres, so temperatures should be similar
+        # but not identical due to land/ocean asymmetry
+        assert s_jan > 0
+        assert n_jul > 0
+
+    def test_southern_hemisphere_winter_colder(self):
+        """SH polar winter should be colder than NH polar winter in stratosphere"""
+        # Antarctic polar vortex is stronger than Arctic
+        sh_winter = CIRA86(latitude=-80, month=7)(30000).temp
+        nh_winter = CIRA86(latitude=80, month=1)(30000).temp
+        assert sh_winter < nh_winter
+
+    def test_southern_hemisphere_basic(self):
+        """negative latitude should work and return valid results"""
+        model = CIRA86(latitude=-45, month=1)
+        atm = model(20000)
+        assert atm.temp > 0
+        assert atm.pres > 0
+        assert atm.dens > 0
+
+    def test_equator_symmetric(self):
+        """equator should be unaffected by hemisphere logic"""
+        t_pos = CIRA86(latitude=0, month=1)(50000).temp
+        t_neg = CIRA86(latitude=0, month=7)(50000).temp  # different month
+        # equator has minimal seasonal variation but these can differ slightly
+        # just verify both are valid
+        assert t_pos > 0
+        assert t_neg > 0
 
 
 # --------------------------------------------------

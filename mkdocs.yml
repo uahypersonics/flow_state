@@ -114,6 +114,7 @@ nav:
     - Isentropic Relations: theory/isentropic.md
     - Transport Models: theory/transport.md
     - Atmosphere Models: theory/atmosphere-models.md
+    - Atmosphere Comparison: theory/atmosphere-comparison.md
   - API Reference:
     - api/index.md
     - FlowState: api/core.md
