@@ -15,6 +15,7 @@ from flow_state.transport import (
     SutherlandBlended,
     SutherlandLowTemp,
 )
+from flow_state.transport.registry import available_transport_models, get_transport_model
 
 # --------------------------------------------------
 # tests for sutherland viscosity model
@@ -327,3 +328,127 @@ class TestPowerLaw:
         # mu2/mu1 should equal (T2/T1)^m
         expected_ratio = (T2 / T1) ** model.m
         assert (mu2 / mu1) == pytest.approx(expected_ratio, rel=1e-6)
+
+    def test_dmudt_finite_difference(self) -> None:
+        """dmudt matches finite difference"""
+        model = PowerLaw.air()
+        T = 300.0
+        dT = 0.01
+        dmudt_fd = (model.mu(T + dT) - model.mu(T - dT)) / (2 * dT)
+        assert model.dmudt(T) == pytest.approx(dmudt_fd, rel=1e-4)
+
+    def test_nu_calculation(self) -> None:
+        """kinematic viscosity = mu / rho"""
+        model = PowerLaw.air()
+        mu = model.mu(300.0)
+        nu = model.nu(300.0, 1.177)
+        assert nu == pytest.approx(mu / 1.177, rel=1e-6)
+
+    def test_mu_negative_temperature_raises(self) -> None:
+        """negative temperature raises ValueError"""
+        model = PowerLaw.air()
+        with pytest.raises(ValueError, match="positive"):
+            model.mu(-100)
+
+    def test_dmudt_negative_temperature_raises(self) -> None:
+        """negative temperature raises ValueError for dmudt"""
+        model = PowerLaw.air()
+        with pytest.raises(ValueError, match="positive"):
+            model.dmudt(-100)
+
+    def test_nu_negative_density_raises(self) -> None:
+        """negative density raises ValueError"""
+        model = PowerLaw.air()
+        with pytest.raises(ValueError, match="positive"):
+            model.nu(300.0, -1.0)
+
+
+# --------------------------------------------------
+# tests for keyes - additional coverage
+# --------------------------------------------------
+
+
+class TestKeyesAdditional:
+    """additional tests for Keyes viscosity law"""
+
+    def test_dmudt_finite_difference(self) -> None:
+        """dmudt matches finite difference"""
+        model = Keyes.air()
+        T = 500.0
+        dT = 0.01
+        dmudt_fd = (model.mu(T + dT) - model.mu(T - dT)) / (2 * dT)
+        assert model.dmudt(T) == pytest.approx(dmudt_fd, rel=1e-4)
+
+    def test_nu_calculation(self) -> None:
+        """kinematic viscosity = mu / rho"""
+        model = Keyes.air()
+        mu = model.mu(300.0)
+        nu = model.nu(300.0, 1.177)
+        assert nu == pytest.approx(mu / 1.177, rel=1e-6)
+
+    def test_mu_negative_temperature_raises(self) -> None:
+        """negative temperature raises ValueError"""
+        model = Keyes.air()
+        with pytest.raises(ValueError, match="positive"):
+            model.mu(-100)
+
+    def test_dmudt_negative_temperature_raises(self) -> None:
+        """negative temperature raises ValueError for dmudt"""
+        model = Keyes.air()
+        with pytest.raises(ValueError, match="positive"):
+            model.dmudt(-100)
+
+    def test_nu_negative_density_raises(self) -> None:
+        """negative density raises ValueError"""
+        model = Keyes.air()
+        with pytest.raises(ValueError, match="positive"):
+            model.nu(300.0, -1.0)
+
+
+# --------------------------------------------------
+# tests for transport registry
+# --------------------------------------------------
+
+
+class TestTransportRegistry:
+    """tests for model registry and factory"""
+
+    def test_get_sutherland(self) -> None:
+        """get sutherland model by name"""
+        model = get_transport_model("sutherland")
+        assert isinstance(model, Sutherland)
+
+    def test_get_keyes(self) -> None:
+        """get keyes model by name"""
+        model = get_transport_model("keyes")
+        assert isinstance(model, Keyes)
+
+    def test_get_power_law(self) -> None:
+        """get power_law model by name"""
+        model = get_transport_model("power_law")
+        assert isinstance(model, PowerLaw)
+
+    def test_case_insensitive(self) -> None:
+        """model lookup is case-insensitive"""
+        model = get_transport_model("Sutherland")
+        assert isinstance(model, Sutherland)
+
+    def test_unknown_model_raises(self) -> None:
+        """unknown model name raises ValueError"""
+        with pytest.raises(ValueError, match="Unknown"):
+            get_transport_model("nonexistent_model")
+
+    def test_custom_kwargs(self) -> None:
+        """pass custom kwargs to constructor"""
+        model = get_transport_model("power_law", mu_ref=1.5e-5, T_ref=250.0, m=0.8)
+        assert model.mu_ref == 1.5e-5
+        assert model.T_ref == 250.0
+        assert model.m == 0.8
+
+    def test_available_models(self) -> None:
+        """list available models"""
+        models = available_transport_models()
+        assert "sutherland" in models
+        assert "keyes" in models
+        assert "power_law" in models
+        assert len(models) >= 5
