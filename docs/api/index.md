@@ -53,7 +53,7 @@ graph LR
     class gas,transport,atmosphere,isentropic,turbulence,units,math_utils leaf
 ```
 
-[Download full-resolution module graph (SVG)](../assets/deps.svg){ .md-button }
+[Download full-resolution module graph (SVG)](../assets/deps.svg){ .md-button download="flow_state_deps.svg" }
 
 ## Modules
 
