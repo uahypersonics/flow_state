@@ -2,6 +2,8 @@
 
 Compressible flow state calculations for Python.
 
+[![Test](https://github.com/uahypersonics/flow_state/actions/workflows/test.yml/badge.svg)](https://github.com/uahypersonics/flow_state/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/uahypersonics/flow_state/branch/main/graph/badge.svg)](https://codecov.io/gh/uahypersonics/flow_state)
 [![PyPI](https://img.shields.io/pypi/v/flow-state-calculator)](https://pypi.org/project/flow-state-calculator/)
 [![Docs](https://img.shields.io/badge/docs-mkdocs-blue)](https://uahypersonics.github.io/flow_state/)
 [![Webapp](https://img.shields.io/badge/webapp-streamlit-red)](https://flow-state-calculator.streamlit.app/)
