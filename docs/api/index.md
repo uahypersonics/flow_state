@@ -49,9 +49,9 @@ graph LR
     cli --> io
 
     %% ---- styling ----
-    classDef hub fill:#263238,stroke:#1a2327,color:#eceff1
-    classDef mid fill:#37474f,stroke:#263238,color:#eceff1
-    classDef leaf fill:#546e7a,stroke:#37474f,color:#eceff1
+    classDef hub fill:#455a64,stroke:#263238,color:#ffffff
+    classDef mid fill:#90a4ae,stroke:#546e7a,color:#263238
+    classDef leaf fill:#cfd8dc,stroke:#90a4ae,color:#263238
 
     class solvers hub
     class core,io,cli mid
