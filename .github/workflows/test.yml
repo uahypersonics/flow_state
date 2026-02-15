@@ -36,4 +36,5 @@ jobs:
         with:
           files: coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
+          slug: uahypersonics/flow_state
           fail_ci_if_error: false
