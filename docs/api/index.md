@@ -2,6 +2,13 @@
 
 Technical reference for the `flow_state` package.
 
+## Modules
+
+- [FlowState](core.md): The main dataclass containing flow properties
+- [Solvers](solvers.md): The `solve()` function and input combinations
+- [Atmosphere](atmosphere.md): Atmosphere models and `AtmosphereState`
+- [Transport](transport.md): Viscosity models (Sutherland, Keyes, etc.)
+
 ## Package Architecture
 
 ``` mermaid
@@ -53,10 +60,3 @@ graph LR
 
 [Download module graph (SVG)](../assets/deps.svg){ .md-button download="flow_state_deps.svg" }
 [View in browser](../assets/deps.svg){ .md-button target="_blank" }
-
-## Modules
-
-- [FlowState](core.md): The main dataclass containing flow properties
-- [Solvers](solvers.md): The `solve()` function and input combinations
-- [Atmosphere](atmosphere.md): Atmosphere models and `AtmosphereState`
-- [Transport](transport.md): Viscosity models (Sutherland, Keyes, etc.)
