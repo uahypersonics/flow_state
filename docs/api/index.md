@@ -42,16 +42,17 @@ graph LR
     cli --> io
 
     %% ---- styling ----
-    classDef hub fill:#37474f,stroke:#263238,color:#fff
-    classDef mid fill:#546e7a,stroke:#37474f,color:#fff
-    classDef leaf fill:#78909c,stroke:#546e7a,color:#fff
+    classDef hub fill:#263238,stroke:#1a2327,color:#eceff1
+    classDef mid fill:#37474f,stroke:#263238,color:#eceff1
+    classDef leaf fill:#546e7a,stroke:#37474f,color:#eceff1
 
     class solvers hub
     class core,io,cli mid
     class gas,transport,atmosphere,isentropic,turbulence,units,math_utils leaf
 ```
 
-[Download full-resolution module graph (SVG)](../assets/deps.svg){ .md-button download="flow_state_deps.svg" }
+[Download module graph (SVG)](../assets/deps.svg){ .md-button download="flow_state_deps.svg" }
+[View in browser](../assets/deps.svg){ .md-button target="_blank" }
 
 ## Modules
 
