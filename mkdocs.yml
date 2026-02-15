@@ -68,7 +68,11 @@ markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
       linenums: true # enable line numbers in code blocks
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.arithmatex:    # LaTeX math support
