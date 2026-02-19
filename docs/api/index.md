@@ -58,5 +58,5 @@ graph LR
     class gas,transport,atmosphere,isentropic,turbulence,units,math_utils leaf
 ```
 
-[Download module graph (SVG)](../assets/deps.svg){ .md-button download="flow_state_deps.svg" }
-[View in browser](../assets/deps.svg){ .md-button target="_blank" }
+[Download architecture (SVG)](../assets/architecture.svg){ .md-button download="flow_state_architecture.svg" }
+[View in browser](../assets/architecture.svg){ .md-button target="_blank" }

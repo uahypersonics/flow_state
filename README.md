@@ -95,8 +95,12 @@ This project uses [Semantic Versioning](https://semver.org/) (`vMAJOR.MINOR.PATC
 To publish a new version to [PyPI](https://pypi.org/project/flow-state-calculator/):
 
 1. Update the version in `src/flow_state/_version.py`
-2. Commit and push to `main`
-3. Tag and push:
+2. Regenerate the API architecture diagram:
+   ```bash
+   pydeps src/flow_state --noshow --max-bacon=4 --cluster -o docs/assets/architecture.svg
+   ```
+3. Commit and push to `main`
+4. Tag and push:
    ```bash
    git tag vMAJOR.MINOR.PATCH
    git push origin vMAJOR.MINOR.PATCH

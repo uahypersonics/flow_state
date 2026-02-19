@@ -119,6 +119,7 @@ nav:
     - api/index.md
     - FlowState: api/core.md
     - Solvers: api/solvers.md
+  - Nomenclature: nomenclature.md
     - Atmosphere: api/atmosphere.md
     - Transport: api/transport.md
   - Examples: examples.md
