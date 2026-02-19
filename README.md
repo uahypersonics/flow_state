@@ -84,6 +84,23 @@ If you use `flow_state` in your research, please cite it:
 }
 ```
 
+## Code Style
+
+This project follows established Python community conventions so that
+contributors can focus on the physics rather than inventing formatting rules.
+
+| Convention | What it covers | Reference |
+|---|---|---|
+| [PEP 8](https://peps.python.org/pep-0008/) | Code formatting, naming, whitespace | Python standard style guide |
+| [PEP 257](https://peps.python.org/pep-0257/) | Docstring structure (triple-quoted, imperative mood) | Python standard docstring conventions |
+| [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html) | Docstring sections (`Parameters`, `Returns`, `Attributes`) | NumPy/SciPy docstring standard — the norm for scientific Python |
+| [Ruff](https://docs.astral.sh/ruff/) | Automated linting and formatting | Enforces PEP 8 compliance automatically |
+| [typing / TYPE_CHECKING](https://docs.python.org/3/library/typing.html#typing.TYPE_CHECKING) | Type hints for IDE support and static analysis | Python standard library |
+
+These aren't arbitrary choices — they are the most widely adopted standards in
+the scientific Python ecosystem (NumPy, SciPy, scikit-learn, etc.), which means
+any Python developer will already be familiar with them.
+
 ## Releasing
 
 This project uses [Semantic Versioning](https://semver.org/) (`vMAJOR.MINOR.PATCH`):
@@ -107,6 +124,19 @@ To publish a new version to [PyPI](https://pypi.org/project/flow-state-calculato
    ```
 
 The GitHub Actions workflow will automatically build and publish to PyPI via Trusted Publishing.
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+Contributions are welcome: code, documentation, verification data, and bug reports.
+See the [contribution types](https://allcontributors.org/docs/en/emoji-key)
+recognized by this project.
 
 ## License
 
