@@ -130,8 +130,17 @@ The GitHub Actions workflow will automatically build and publish to PyPI via Tru
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/chader2811"><img src="https://avatars.githubusercontent.com/u/57595181?v=4?s=100" width="100px;" alt="chader2811"/><br /><sub><b>chader2811</b></sub></a><br /><a href="https://github.com/uahypersonics/flow_state/commits?author=chader2811" title="Code">💻</a> <a href="https://github.com/uahypersonics/flow_state/commits?author=chader2811" title="Documentation">📖</a> <a href="#design-chader2811" title="Design">🎨</a> <a href="#ideas-chader2811" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-chader2811" title="Maintenance">🚧</a> <a href="#data-chader2811" title="Data">🔣</a> <a href="https://github.com/uahypersonics/flow_state/commits?author=chader2811" title="Tests">⚠️</a> <a href="#example-chader2811" title="Examples">💡</a> <a href="#infra-chader2811" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    </tr>
+  </tbody>
+</table>
+
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 Contributions are welcome: code, documentation, verification data, and bug reports.

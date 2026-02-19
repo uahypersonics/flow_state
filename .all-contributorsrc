@@ -3,11 +3,31 @@
   "projectOwner": "uahypersonics",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "files": ["README.md"],
+  "files": [
+    "README.md"
+  ],
   "imageSize": 100,
   "commit": true,
   "commitConvention": "angular",
-  "contributors": [],
+  "contributors": [
+    {
+      "login": "chader2811",
+      "name": "chader2811",
+      "avatar_url": "https://avatars.githubusercontent.com/u/57595181?v=4",
+      "profile": "https://github.com/chader2811",
+      "contributions": [
+        "code",
+        "doc",
+        "design",
+        "ideas",
+        "maintenance",
+        "data",
+        "test",
+        "example",
+        "infra"
+      ]
+    }
+  ],
   "contributorsPerLine": 7,
   "commitType": "docs"
 }
