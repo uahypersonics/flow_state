@@ -39,10 +39,10 @@ class TestSolveStaticConditions:
         assert state.gas_model == "air"
 
         # Check computed properties
-        expected_dens = 101325.0 / (287.05 * 300.0)
+        expected_dens = 101325.0 / (287.15 * 300.0)
         assert state.dens == pytest.approx(expected_dens, rel=1e-6)
 
-        expected_a = math.sqrt(1.4 * 287.05 * 300.0)
+        expected_a = math.sqrt(1.4 * 287.15 * 300.0)
         assert state.a == pytest.approx(expected_a, rel=1e-6)
 
     def test_with_mach_computes_velocity(self) -> None:
@@ -104,7 +104,7 @@ class TestFromMPT:
         assert state.gas_model == "air"
 
         # Check computed velocity
-        expected_a = math.sqrt(1.4 * 287.05 * 300.0)
+        expected_a = math.sqrt(1.4 * 287.15 * 300.0)
         expected_uvel = 2.0 * expected_a
         assert state.a == pytest.approx(expected_a, rel=1e-6)
         assert state.uvel == pytest.approx(expected_uvel, rel=1e-6)

@@ -32,7 +32,7 @@ from dataclasses import dataclass
 # constants
 # --------------------------------------------------
 # Reference values for air
-R_AIR_COLD = 287.05  # Specific gas constant for undissociated air [J/(kg K)]
+R_AIR_COLD = 287.15  # Specific gas constant for undissociated air [J/(kg K)]
 P_REF = 101325.0     # Reference pressure [Pa] (1 atm)
 T_REF = 273.15       # Reference temperature [K]
 

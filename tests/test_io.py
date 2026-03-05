@@ -177,15 +177,14 @@ class TestLegacyDat:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             path = Path(tmpdir) / "flow.dat"
-            write_flow_conditions_dat(state, path, include_header=False)
+            write_flow_conditions_dat(state, path)
 
             content = path.read_text()
-            assert "# flow_conditions.dat" not in content
-            assert "pres = " in content
-            assert "temp = " in content
-            assert "dens = " in content
-            assert "gamma = " in content
-            assert "M = " in content
+            assert "freestream pressure, pfs" in content
+            assert "freestream temperature, Tfs" in content
+            assert "freestream density, rhofs" in content
+            assert "heat capacity ratio, gamma" in content
+            assert "freestream Mach number, M" in content
 
     def test_write_dat_with_transport(self) -> None:
         """transport properties included when present"""
@@ -193,13 +192,12 @@ class TestLegacyDat:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             path = Path(tmpdir) / "flow.dat"
-            write_flow_conditions_dat(state, path, include_header=False)
+            write_flow_conditions_dat(state, path)
 
             content = path.read_text()
-            assert "mu = " in content
-            assert "nu = " in content
-            assert "pr = " in content
-            assert "re1 = " in content
+            assert "viscosity, mu" in content
+            assert "unit Reynolds number, re1" in content
+            assert "Prandtl number, Pr" in content
 
 
 # --------------------------------------------------

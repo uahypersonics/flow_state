@@ -30,7 +30,7 @@ THETA_VIB_O2 = 2239.0  # oxygen
 # Specific gas constants [J/(kg K)]
 R_N2 = 296.8   # R_universal / M_N2
 R_O2 = 259.8   # R_universal / M_O2
-R_AIR = 287.05  # R_universal / M_air
+R_AIR = 287.15  # R_universal / M_air
 
 
 # --------------------------------------------------

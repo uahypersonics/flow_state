@@ -106,7 +106,7 @@ class TestUSSA76:
     def test_density_ideal_gas(self, model):
         """verify density computed from ideal gas law"""
         atm = model(10000)
-        r_air = 287.05
+        r_air = 287.15
         expected_dens = atm.pres / (r_air * atm.temp)
         assert atm.dens == pytest.approx(expected_dens, rel=0.01)
 

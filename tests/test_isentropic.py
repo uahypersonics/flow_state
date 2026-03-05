@@ -79,7 +79,7 @@ class TestStagnationStaticConversion:
         pres_stag_orig = 500000.0
         temp_stag_orig = 400.0
         gamma = 1.4
-        r_gas = 287.05
+        r_gas = 287.15
 
         # convert stagnation -> static
         static = stag_to_stat(M, pres_stag_orig, temp_stag_orig, gamma, r_gas)
@@ -123,7 +123,7 @@ class TestStagnationStaticConversion:
         M = 1.5
         pres_stag = 200000.0
         temp_stag = 350.0
-        r_gas = 287.05
+        r_gas = 287.15
 
         static = stag_to_stat(M, pres_stag, temp_stag, r_gas=r_gas)
         expected_dens = static.pres / (r_gas * static.temp)

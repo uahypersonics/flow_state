@@ -112,7 +112,7 @@ def _build_state(
         mu = transport.mu(temp)
         nu = transport.nu(temp, dens)
         if computed_pr is None:
-            computed_pr = 0.72
+            computed_pr = 0.71
         # compute re1 if we have velocity
         if uvel is not None and mu > 0:
             re1 = dens * uvel / mu

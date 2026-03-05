@@ -60,10 +60,10 @@ class PerfectGas:
 
         Notes:
             - gamma = 1.4 (diatomic gas approximation)
-            - r_gas = 287.05 J/(kg K) (based on M_air = 28.97 g/mol)
+            - r_gas = 287.15 J/(kg K) (based on M_air = 28.965 g/mol)
             - Valid for static temp < ~800 K (vibrational excitation negligible)
         """
-        return cls(_gamma=1.4, _r_gas=287.05, name="air")
+        return cls(_gamma=1.4, _r_gas=287.15, name="air")
 
     @classmethod
     def nitrogen(cls) -> PerfectGas:

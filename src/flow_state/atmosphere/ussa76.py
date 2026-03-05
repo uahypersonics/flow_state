@@ -37,7 +37,7 @@ _LAYERS = [
 _G0 = 9.80665       # standard gravity [m/s²]
 _M = 0.0289644      # molar mass of dry air [kg/mol]
 _R_STAR = 8.31447   # universal gas constant [J/(mol·K)]
-_R_AIR = 287.05     # specific gas constant for air [J/(kg·K)]
+_R_AIR = 287.15     # specific gas constant for air [J/(kg·K)]
 
 # --------------------------------------------------
 # pre-compute base pressures for each layer

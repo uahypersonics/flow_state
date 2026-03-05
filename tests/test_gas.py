@@ -24,7 +24,7 @@ class TestPerfectGas:
         """air preset has correct values"""
         air = PerfectGas.air()
         assert air.gamma(300, 101325) == 1.4
-        assert air.r_gas(300, 101325) == 287.05
+        assert air.r_gas(300, 101325) == 287.15
         assert air.name == "air"
 
     def test_nitrogen_defaults(self) -> None:
@@ -45,17 +45,17 @@ class TestPerfectGas:
         """cp and cv are correctly computed"""
         air = PerfectGas.air()
         # cp = gamma * R / (gamma - 1)
-        expected_cp = 1.4 * 287.05 / 0.4
+        expected_cp = 1.4 * 287.15 / 0.4
         assert air.cp(300, 101325) == pytest.approx(expected_cp, rel=1e-6)
         # cv = R / (gamma - 1)
-        expected_cv = 287.05 / 0.4
+        expected_cv = 287.15 / 0.4
         assert air.cv(300, 101325) == pytest.approx(expected_cv, rel=1e-6)
 
     def test_sound_speed_at_known_temperature(self) -> None:
         """speed of sound at T = 300 K, air: a ≈ 347.2 m/s"""
         air = PerfectGas.air()
         a = air.sound_speed(temp=300.0)
-        expected = math.sqrt(1.4 * 287.05 * 300.0)
+        expected = math.sqrt(1.4 * 287.15 * 300.0)
         assert a == pytest.approx(expected, rel=1e-6)
         # sanity check: should be around 347 m/s
         assert 340 < a < 360

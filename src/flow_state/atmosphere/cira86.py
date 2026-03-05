@@ -215,7 +215,7 @@ class CIRA86:
     # --------------------------------------------------
     # define attributes
     # --------------------------------------------------
-    R_AIR = 287.05    # Specific gas constant for air [J/(kg·K)]
+    R_AIR = 287.15    # Specific gas constant for air [J/(kg·K)]
     G0 = 9.80665      # Standard gravity [m/s²]
 
     # --------------------------------------------------

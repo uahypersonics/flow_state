@@ -29,7 +29,7 @@ class TestEquilibriumAir:
 
         # at 300 K, no dissociation, r_gas = R_air_cold
         r_gas_300 = equil.r_gas(300, 101325)
-        assert r_gas_300 == pytest.approx(287.05, rel=0.01)
+        assert r_gas_300 == pytest.approx(287.15, rel=0.01)
 
     def test_r_gas_increases_with_temperature(self) -> None:
         """r_gas increases as temperature increases (dissociation)"""

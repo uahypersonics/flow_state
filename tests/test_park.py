@@ -22,7 +22,7 @@ class TestParkAir:
         """air preset has correct values"""
         air = ParkAir.air()
         assert air.name == "park_air"
-        assert air.r_gas(300, 101325) == pytest.approx(287.05, rel=1e-6)
+        assert air.r_gas(300, 101325) == pytest.approx(287.15, rel=1e-6)
 
     def test_gamma_low_temp_matches_perfect_gas(self) -> None:
         """at low temperature, gamma approaches perfect gas value"""

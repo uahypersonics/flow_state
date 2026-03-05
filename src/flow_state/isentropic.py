@@ -38,7 +38,7 @@ def stag_to_stat(
     pres_stag: float,
     temp_stag: float,
     gamma: float = 1.4,
-    r_gas: float = 287.05,
+    r_gas: float = 287.15,
 ) -> StaticState:
     """
     Convert stagnation conditions to static conditions using isentropic relations.
@@ -48,7 +48,7 @@ def stag_to_stat(
         pres_stag: Stagnation (total) pressure [Pa]
         temp_stag: Stagnation (total) temperature [K]
         gamma: Specific heat ratio [-] (default: 1.4 for air)
-        r_gas: Specific gas constant [J/(kg K)] (default: 287.05 for air)
+        r_gas: Specific gas constant [J/(kg K)] (default: 287.15 for air)
 
     Returns:
         StaticState with static pressure, temperature, and density.
@@ -92,7 +92,7 @@ def stat_to_stag(
     pres: float,
     temp: float,
     gamma: float = 1.4,
-    r_gas: float = 287.05,
+    r_gas: float = 287.15,
 ) -> StagnationState:
     """
     Convert static conditions to stagnation conditions using isentropic relations.
@@ -102,7 +102,7 @@ def stat_to_stag(
         pres: Static pressure [Pa]
         temp: Static temperature [K]
         gamma: Specific heat ratio [-] (default: 1.4 for air)
-        r_gas: Specific gas constant [J/(kg K)] (default: 287.05 for air)
+        r_gas: Specific gas constant [J/(kg K)] (default: 287.15 for air)
 
     Returns:
         StagnationState with stagnation pressure, temperature, and density.
