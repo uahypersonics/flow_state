@@ -1,9 +1,10 @@
 """Compressible flow state utilities."""
 
-from flow_state import atmosphere, io
 from importlib.metadata import version
 
 __version__ = version("flow-state-calculator")
+
+from flow_state import atmosphere, io
 from flow_state.core import FlowState
 from flow_state.isentropic import stag_to_stat, stat_to_stag
 from flow_state.solvers import (
