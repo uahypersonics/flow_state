@@ -117,6 +117,7 @@ nav:
     - Atmosphere Comparison: theory/atmosphere-comparison.md
   - API Reference:
     - api/index.md
+    - Architecture: api/architecture.md
     - FlowState: api/core.md
     - Solvers: api/solvers.md
     - Atmosphere: api/atmosphere.md
