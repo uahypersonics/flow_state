@@ -115,7 +115,7 @@ To publish a new version to [PyPI](https://pypi.org/project/flow-state-calculato
 2. Commit and push to `main`
 3. Tag and push:
    ```bash
-   git tag vMAJOR.MINOR.PATCH
+   git tag -a vMAJOR.MINOR.PATCH -m "Release vMAJOR.MINOR.PATCH"
    git push origin vMAJOR.MINOR.PATCH
    ```
 
